@@ -1,10 +1,9 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 const Navbar = () => {
     return (
-        <nav className='container mx-auto flex justify-between py-5'>
+        <nav className='container mx-auto flex justify-between py-5 items-center'>
             <ul className='flex gap-3'>
                 <li><Link href={'/'}>Home</Link> </li>
                 <li><Link href={'/destination'}>Destination</Link> </li>
