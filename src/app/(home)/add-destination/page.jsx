@@ -30,25 +30,41 @@ const AddDestination = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData(e.currentTarget);
-        const destination = Object.fromEntries(formData.entries());
-        console.log(destination);
+        try {
+            setIsSubmitting(true);
 
-        const res = await fetch('http://localhost:5000/destination', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(destination)
-        })
+            const formData = new FormData(e.currentTarget);
+            const destination = Object.fromEntries(formData.entries());
 
-        const data=await res.json()
+            console.log(destination);
 
-        // setTimeout(() => {
-        //     setIsSubmitting(false);
-        //     form.reset();
-        //     setImagePreview("");
-        // }, 1000);
+            const res = await fetch("http://localhost:5000/destination", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(destination),
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to add destination");
+            }
+
+            const data = await res.json();
+
+            console.log(data);
+
+            alert("Destination Added Successfully!");
+
+            e.target.reset();
+            setImagePreview("");
+
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
