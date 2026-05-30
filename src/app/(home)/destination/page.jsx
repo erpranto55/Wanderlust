@@ -1,6 +1,15 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
-import { FaCalendarAlt } from "react-icons/fa";
+
+import {
+    FaCalendarAlt,
+    FaMoneyBillWave,
+    FaSortAmountDown,
+    FaUmbrellaBeach,
+    FaMapMarkerAlt,
+} from "react-icons/fa";
+
 import { IoLocation } from "react-icons/io5";
 
 const Destination = async ({ searchParams }) => {
@@ -10,11 +19,41 @@ const Destination = async ({ searchParams }) => {
     const category = params?.category || "";
     const sort = params?.sort || "";
 
+    const location = params?.location || "";
+    const duration = params?.duration || "";
+    const budget = params?.budget || "";
+
     const res = await fetch("http://localhost:5000/destination", {
         cache: "no-store",
     });
 
     let destinations = await res.json();
+
+    // Search by location
+    if (location) {
+        destinations = destinations.filter((item) =>
+            item.country
+                .toLowerCase()
+                .includes(location.toLowerCase()) ||
+            item.destinationName
+                .toLowerCase()
+                .includes(location.toLowerCase())
+        );
+    }
+
+    // Filter by duration
+    if (duration) {
+        destinations = destinations.filter((item) =>
+            item.duration.includes(duration)
+        );
+    }
+
+    // Filter by budget
+    if (budget) {
+        destinations = destinations.filter(
+            (item) => Number(item.price) <= Number(budget)
+        );
+    }
 
     // Filter by category
     if (category) {
@@ -37,6 +76,7 @@ const Destination = async ({ searchParams }) => {
 
             {/* Header */}
             <div className="mb-10">
+
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
                     Explore All Destinations
                 </h1>
@@ -46,14 +86,55 @@ const Destination = async ({ searchParams }) => {
                 </p>
             </div>
 
-            {/* Filters */}
-            <form className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+            {/* Active Filters */}
+            <div className="flex flex-wrap gap-3 mb-8">
 
-                {/* Category Filter */}
+                {location && (
+                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
+                        <FaMapMarkerAlt />
+                        {location}
+                    </div>
+                )}
+
+                {duration && (
+                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
+                        <FaCalendarAlt />
+                        {duration}
+                    </div>
+                )}
+
+                {budget && (
+                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
+                        <FaMoneyBillWave />
+                        Under ${budget}
+                    </div>
+                )}
+
+                {category && (
+                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
+                        <FaUmbrellaBeach />
+                        {category}
+                    </div>
+                )}
+
+                {sort && (
+                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
+                        <FaSortAmountDown />
+                        {sort === "low"
+                            ? "Low to High"
+                            : "High to Low"}
+                    </div>
+                )}
+            </div>
+
+            {/* Filters */}
+            <form className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
+
+                {/* Category */}
                 <select
                     name="category"
                     defaultValue={category}
-                    className="border border-gray-300 rounded-xl px-4 h-12 outline-none"
+                    className="border border-gray-300 rounded-2xl px-4 h-14 outline-none focus:border-cyan-500"
                 >
                     <option value="">All Categories</option>
                     <option value="Beach">Beach</option>
@@ -64,32 +145,32 @@ const Destination = async ({ searchParams }) => {
                     <option value="Cultural">Cultural</option>
                 </select>
 
-                {/* Price Sort */}
+                {/* Sort */}
                 <select
                     name="sort"
                     defaultValue={sort}
-                    className="border border-gray-300 rounded-xl px-4 h-12 outline-none"
+                    className="border border-gray-300 rounded-2xl px-4 h-14 outline-none focus:border-cyan-500"
                 >
                     <option value="">Sort By Price</option>
                     <option value="low">Low to High</option>
                     <option value="high">High to Low</option>
                 </select>
 
-                {/* Apply Button */}
+                {/* Apply */}
                 <button
                     type="submit"
-                    className="h-12 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold transition-all duration-300"
+                    className="h-14 rounded-2xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold transition-all duration-300"
                 >
                     Apply Filters
                 </button>
 
-                {/* Clear Filters */}
-                <a
+                {/* Clear */}
+                <Link
                     href="/destination"
-                    className="h-12 rounded-xl border border-gray-300 flex items-center justify-center font-semibold hover:bg-gray-100 transition-all duration-300"
+                    className="h-14 rounded-2xl border border-gray-300 flex items-center justify-center font-semibold hover:bg-gray-100 transition-all duration-300"
                 >
                     Clear Filters
-                </a>
+                </Link>
             </form>
 
             {/* Total */}
@@ -99,14 +180,17 @@ const Destination = async ({ searchParams }) => {
 
             {/* Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
                 {destinations.map((destination) => (
+
                     <div
                         key={destination._id}
-                        className="group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500"
+                        className="group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
                     >
 
                         {/* Image */}
                         <div className="relative h-64 overflow-hidden">
+
                             <Image
                                 src={destination.imageUrl}
                                 alt={destination.destinationName}
@@ -131,6 +215,7 @@ const Destination = async ({ searchParams }) => {
 
                             {/* Title & Price */}
                             <div className="flex items-center justify-between mt-2 gap-4">
+
                                 <h2 className="text-2xl font-bold text-gray-900">
                                     {destination.destinationName}
                                 </h2>
@@ -152,9 +237,13 @@ const Destination = async ({ searchParams }) => {
                             </p>
 
                             {/* Button */}
-                            <button className="mt-6 w-full h-12 rounded-2xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold transition-all duration-300">
-                                Book Now
-                            </button>
+                            <Link
+                                href={`/destination/${destination._id}`}
+                            >
+                                <button className="mt-6 w-full h-12 rounded-2xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold transition-all duration-300 cursor-pointer">
+                                    View Details
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 ))}
