@@ -27,9 +27,7 @@ const categories = [
     "Cultural",
 ];
 
-export function EditModal({
-    destination,
-}) {
+export function EditModal({ destination }) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -390,11 +388,15 @@ export function EditModal({
 
                                         <div className="overflow-hidden rounded-3xl border border-slate-200">
 
-                                            <Image
-                                                src={imagePreview}
-                                                alt="Preview"
-                                                className="w-full h-64 object-cover"
-                                            />
+                                            <div className="relative w-full h-64">
+                                                <Image
+                                                    src={imagePreview}
+                                                    alt="Preview"
+                                                    fill
+                                                    className="object-cover rounded-3xl"
+                                                    unoptimized
+                                                />
+                                            </div>
                                         </div>
                                     )}
 

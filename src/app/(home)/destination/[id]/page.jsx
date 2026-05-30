@@ -1,3 +1,4 @@
+import DeleteModal from "@/components/DeleteModal";
 import { EditModal } from "@/components/EditModal";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,15 +49,10 @@ const DestinationDetails = async ({ params }) => {
                     <div className="flex items-center gap-4">
 
                         {/* Edit */}
-                        <EditModal/>
+                        <EditModal destination={destination}/>
 
                         {/* Delete */}
-                        <button
-                            className="h-10 px-6 rounded-2xl bg-red-500 hover:bg-red-600 text-white transition-all duration-300 font-semibold flex items-center gap-3 cursor-pointer"
-                        >
-                            <FaTrash />
-                            Delete
-                        </button>
+                        <DeleteModal id={destination._id} />
                     </div>
                 </div>
 
