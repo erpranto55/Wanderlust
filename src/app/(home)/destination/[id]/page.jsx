@@ -7,9 +7,11 @@ import {
     FaCalendarAlt,
     FaCheck,
     FaClock,
+    FaEdit,
     FaGlobeAsia,
     FaMapMarkerAlt,
     FaStar,
+    FaTrash,
     FaUsers,
 } from "react-icons/fa";
 
@@ -29,15 +31,39 @@ const DestinationDetails = async ({ params }) => {
             {/* Container */}
             <div className="max-w-7xl mx-auto px-4 py-10">
 
-                {/* Back Button */}
-                <Link
-                    href="/destination"
-                    className="inline-flex items-center gap-3 text-gray-500 hover:text-cyan-600 transition-all duration-300 mb-8"
-                >
-                    <FaArrowLeft />
+                {/* Top Actions */}
+                <div className="flex items-center justify-between mb-8">
 
-                    Back to Destinations
-                </Link>
+                    {/* Back Button */}
+                    <Link
+                        href="/destination"
+                        className="inline-flex items-center gap-3 text-gray-500 hover:text-cyan-600 transition-all duration-300"
+                    >
+                        <FaArrowLeft />
+                        Back to Destinations
+                    </Link>
+
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-4">
+
+                        {/* Edit */}
+                        <Link href={`/update-destination/${destination._id}`}>
+
+                            <button className="h-10 px-6 rounded-2xl border border-slate-300 hover:bg-slate-100 transition-all duration-300 font-semibold flex items-center gap-3 cursor-pointer">
+                                <FaEdit />
+                                Edit
+                            </button>
+                        </Link>
+
+                        {/* Delete */}
+                        <button
+                            className="h-10 px-6 rounded-2xl bg-red-500 hover:bg-red-600 text-white transition-all duration-300 font-semibold flex items-center gap-3 cursor-pointer"
+                        >
+                            <FaTrash />
+                            Delete
+                        </button>
+                    </div>
+                </div>
 
                 {/* Hero Image */}
                 <div className="relative h-75 md:h-137.5 overflow-hidden rounded-[32px] shadow-2xl">
