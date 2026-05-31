@@ -1,4 +1,5 @@
 import Banner from "@/components/Banner";
+import Gallery from "@/components/Gallery";
 import PopularDestinations from "@/components/PopularDestination";
 import SpecialOffers from "@/components/SpecialOffers";
 import TravelCategories from "@/components/TravelCategories";
@@ -14,6 +15,7 @@ export default function Home() {
       <TravelCategories />
       <SpecialOffers />
       <TravelerReviews />
+      <Gallery/>
     </div>
   );
 }
