@@ -9,6 +9,7 @@ import {
     FaCalendarAlt,
     FaCheck,
     FaMapMarkerAlt,
+    FaQuoteRight,
     FaStar,
     FaUsers,
 } from "react-icons/fa";
@@ -24,370 +25,619 @@ const DestinationDetails = async ({ params }) => {
         }
     );
 
-    const destination = await res.json();
+    const destination =
+        await res.json();
 
-    // =========================
-    // DYNAMIC REVIEW STATS
-    // =========================
+    // REVIEWS
 
-    const reviews = destination?.reviews || [];
+    const reviews =
+        destination?.reviews || [];
 
-    const totalReviews = reviews.length;
+    const totalReviews =
+        reviews.length;
 
     const averageRating =
         totalReviews > 0
             ? (
                 reviews.reduce(
                     (acc, review) =>
-                        acc + Number(review.rating),
+                        acc +
+                        Number(
+                            review.rating
+                        ),
                     0
                 ) / totalReviews
             ).toFixed(1)
             : 0;
 
     return (
-        <div className="bg-[#f8fafc] min-h-screen">
+        <section className="relative min-h-screen bg-base-100 transition-all duration-500">
 
-            {/* Container */}
-            <div className="max-w-7xl mx-auto px-4 py-10">
+            {/* BG EFFECT */}
 
-                {/* Top Actions */}
-                <div className="flex items-center justify-between mb-8">
+            <div className="absolute top-0 left-0 w-112.5 h-112.5 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-                    {/* Back Button */}
+            <div className="absolute bottom-0 right-0 w-112.5 h-112.5 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+            {/* CONTAINER */}
+
+            <div className="relative max-w-7xl mx-auto px-4 py-12">
+
+                {/* TOP */}
+
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-10">
+
+                    {/* BACK */}
+
                     <Link
                         href="/destination"
-                        className="inline-flex items-center gap-3 text-gray-500 hover:text-cyan-600 transition-all duration-300"
+                        className="group inline-flex items-center gap-3 text-base-content/70 hover:text-cyan-500 transition-all duration-300 font-medium"
                     >
-                        <FaArrowLeft />
 
-                        Back to Destinations
+                        <FaArrowLeft className="group-hover:-translate-x-1 transition-all duration-300" />
+
+                        Back To Destinations
+
                     </Link>
 
-                    {/* Action Buttons */}
+                    {/* ACTIONS */}
+
                     <div className="flex items-center gap-4">
 
-                        {/* Edit */}
-                        <EditModal destination={destination} />
+                        <EditModal
+                            destination={
+                                destination
+                            }
+                        />
 
-                        {/* Delete */}
-                        <DeleteModal id={destination._id} />
+                        <DeleteModal
+                            id={
+                                destination._id
+                            }
+                        />
+
                     </div>
                 </div>
 
-                {/* Hero Image */}
-                <div className="relative h-75 md:h-137.5 overflow-hidden rounded-[32px] shadow-2xl">
+                {/* HERO */}
 
-                    <Image
-                        src={destination.imageUrl}
-                        alt={destination.destinationName}
-                        fill
-                        className="object-cover"
-                        priority
-                    />
+                <div className="relative overflow-hidden rounded-[40px] border border-base-300 shadow-[0_25px_80px_rgba(0,0,0,0.10)]">
 
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent"></div>
+                    <div className="relative h-112.5 md:h-162.5 overflow-hidden">
 
-                    {/* Category */}
-                    <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-5 py-2 rounded-full font-semibold shadow-lg">
-                        {destination.category}
-                    </div>
+                        <Image
+                            src={
+                                destination.imageUrl
+                            }
+                            alt={
+                                destination.destinationName
+                            }
+                            fill
+                            priority
+                            unoptimized
+                            className="object-cover"
+                        />
 
-                    {/* Bottom Content */}
-                    <div className="absolute bottom-0 left-0 p-8 md:p-12 text-white">
+                        {/* OVERLAY */}
 
-                        <p className="flex items-center gap-2 text-lg text-gray-200">
-                            <FaMapMarkerAlt />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent"></div>
 
-                            {destination.country}
-                        </p>
+                        {/* CATEGORY */}
 
-                        <h1 className="text-4xl md:text-6xl font-black mt-3">
-                            {destination.destinationName}
-                        </h1>
+                        <div className="absolute top-7 right-7 px-5 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-white font-bold shadow-lg">
 
-                        <div className="flex flex-wrap items-center gap-6 mt-5 text-gray-200">
+                            {
+                                destination.category
+                            }
 
-                            {/* Dynamic Rating */}
-                            <p className="flex items-center gap-2">
-                                <FaStar className="text-yellow-400" />
+                        </div>
 
-                                {averageRating} ({totalReviews} Reviews)
-                            </p>
+                        {/* CONTENT */}
 
-                            <p className="flex items-center gap-2">
-                                <FaCalendarAlt />
+                        <div className="absolute bottom-0 left-0 p-8 md:p-14 text-white max-w-4xl">
 
-                                {destination.duration}
-                            </p>
+                            {/* COUNTRY */}
 
-                            <p className="flex items-center gap-2">
-                                <FaUsers />
+                            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-sm font-semibold">
 
-                                2 - 10 Travelers
-                            </p>
+                                <FaMapMarkerAlt />
+
+                                {
+                                    destination.country
+                                }
+
+                            </div>
+
+                            {/* TITLE */}
+
+                            <h1 className="text-4xl md:text-7xl font-black mt-6 leading-tight">
+
+                                {
+                                    destination.destinationName
+                                }
+
+                            </h1>
+
+                            {/* INFO */}
+
+                            <div className="flex flex-wrap items-center gap-6 mt-7 text-white/80">
+
+                                <div className="flex items-center gap-2">
+
+                                    <FaStar className="text-yellow-400" />
+
+                                    <span>
+
+                                        {
+                                            averageRating
+                                        }
+
+                                        {" "}
+                                        (
+                                        {
+                                            totalReviews
+                                        }
+
+                                        {" "}
+                                        Reviews)
+
+                                    </span>
+
+                                </div>
+
+                                <div className="flex items-center gap-2">
+
+                                    <FaCalendarAlt className="text-cyan-400" />
+
+                                    {
+                                        destination.duration
+                                    }
+
+                                </div>
+
+                                <div className="flex items-center gap-2">
+
+                                    <FaUsers className="text-cyan-400" />
+
+                                    {
+                                        destination.travelers ||
+                                        "2 - 10 Travelers"
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* BIG NUMBER */}
+
+                        <div className="absolute -bottom-10 right-0 text-[180px] md:text-[260px] font-black text-white/4 leading-none">
+
+                            01
+
                         </div>
                     </div>
                 </div>
 
-                {/* Main Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-12">
+                {/* GRID */}
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-14">
 
                     {/* LEFT */}
+
                     <div className="lg:col-span-2 space-y-12">
 
-                        {/* Overview */}
-                        <div>
-                            <h2 className="text-3xl font-bold mb-6">
+                        {/* OVERVIEW */}
+
+                        <div className="relative overflow-hidden rounded-[36px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-8 md:p-10 shadow-[0_20px_80px_rgba(0,0,0,0.05)]">
+
+                            <h2 className="text-3xl md:text-4xl font-black text-base-content mb-7">
+
                                 Overview
+
                             </h2>
 
-                            <p className="text-gray-600 leading-relaxed text-lg">
-                                {destination.description}
+                            <p className="text-base-content/70 leading-relaxed text-lg">
+
+                                {
+                                    destination.description
+                                }
+
                             </p>
                         </div>
 
-                        {/* Highlights */}
-                        <div>
+                        {/* HIGHLIGHTS */}
 
-                            <h2 className="text-3xl font-bold mb-6">
+                        <div className="relative overflow-hidden rounded-[36px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-8 md:p-10 shadow-[0_20px_80px_rgba(0,0,0,0.05)]">
+
+                            <h2 className="text-3xl md:text-4xl font-black text-base-content mb-8">
+
                                 Highlights
+
                             </h2>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                                <div className="flex items-center gap-3">
-                                    <span className="text-green-500">✓</span>
-                                    <p>Luxury accommodation included</p>
-                                </div>
+                                {[
+                                    "Luxury accommodation included",
+                                    "Professional travel guide",
+                                    "Airport pickup & drop service",
+                                    "Local cultural experiences",
+                                    "Premium sightseeing tours",
+                                    "24/7 customer support",
+                                ].map(
+                                    (
+                                        item,
+                                        index
+                                    ) => (
 
-                                <div className="flex items-center gap-3">
-                                    <span className="text-green-500">✓</span>
-                                    <p>Professional travel guide</p>
-                                </div>
+                                        <div
+                                            key={
+                                                index
+                                            }
+                                            className="flex items-center gap-4 rounded-2xl border border-base-300 bg-base-100/70 px-5 py-4"
+                                        >
 
-                                <div className="flex items-center gap-3">
-                                    <span className="text-green-500">✓</span>
-                                    <p>Airport pickup & drop service</p>
-                                </div>
+                                            <div className="w-10 h-10 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center">
 
-                                <div className="flex items-center gap-3">
-                                    <span className="text-green-500">✓</span>
-                                    <p>Local cultural experiences</p>
-                                </div>
+                                                <FaCheck />
 
-                                <div className="flex items-center gap-3">
-                                    <span className="text-green-500">✓</span>
-                                    <p>Premium sightseeing tours</p>
-                                </div>
-
-                                <div className="flex items-center gap-3">
-                                    <span className="text-green-500">✓</span>
-                                    <p>24/7 customer support</p>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        {/* Itinerary */}
-                        <div>
-
-                            <h2 className="text-3xl font-bold mb-8">
-                                Itinerary
-                            </h2>
-
-                            <div className="space-y-8">
-
-                                {destination?.itinerary?.map((item, index) => (
-
-                                    <div
-                                        key={index}
-                                        className="flex gap-5"
-                                    >
-
-                                        {/* Timeline */}
-                                        <div className="flex flex-col items-center">
-
-                                            <div className="w-10 h-10 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold">
-                                                {item.day}
                                             </div>
 
-                                            {index !== destination.itinerary.length - 1 && (
-                                                <div className="w-0.5 h-full bg-gray-200 mt-2"></div>
-                                            )}
-                                        </div>
+                                            <p className="text-base-content/80 font-medium">
 
-                                        {/* Content */}
-                                        <div className="pb-8">
+                                                {
+                                                    item
+                                                }
 
-                                            <h3 className="text-xl font-semibold">
-                                                {item.title}
-                                            </h3>
-
-                                            <p className="text-gray-500 mt-2 leading-relaxed">
-                                                {item.description}
                                             </p>
+
                                         </div>
-                                    </div>
-                                ))}
+                                    )
+                                )}
                             </div>
                         </div>
 
-                        {/* Reviews */}
-                        <div>
+                        {/* ITINERARY */}
 
-                            <h2 className="text-3xl font-bold mb-8">
-                                Traveler Reviews
+                        <div className="relative overflow-hidden rounded-[36px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-8 md:p-10 shadow-[0_20px_80px_rgba(0,0,0,0.05)]">
+
+                            <h2 className="text-3xl md:text-4xl font-black text-base-content mb-10">
+
+                                Travel Itinerary
+
                             </h2>
 
-                            {/* Empty State */}
-                            {!destination?.reviews?.length && (
+                            <div className="space-y-10">
 
-                                <div className="border border-dashed border-gray-300 rounded-3xl p-10 text-center bg-white">
+                                {destination?.itinerary?.map(
+                                    (
+                                        item,
+                                        index
+                                    ) => (
 
-                                    <h3 className="text-2xl font-bold text-gray-700">
-                                        No Traveler Reviews Yet
-                                    </h3>
+                                        <div
+                                            key={
+                                                index
+                                            }
+                                            className="flex gap-5"
+                                        >
 
-                                    <p className="text-gray-500 mt-3">
-                                        This destination has not received any reviews yet.
-                                    </p>
-                                </div>
-                            )}
+                                            {/* TIMELINE */}
 
-                            {/* Review List */}
-                            <div className="space-y-6">
+                                            <div className="flex flex-col items-center">
 
-                                {destination?.reviews?.map((review, index) => (
+                                                <div className="w-14 h-14 rounded-2xl bg-linear-to-r from-cyan-500 to-blue-600 text-white flex items-center justify-center font-black shadow-lg">
 
-                                    <div
-                                        key={index}
-                                        className="border border-gray-200 rounded-3xl p-6 bg-white shadow-sm hover:shadow-md transition-all duration-300"
-                                    >
+                                                    {
+                                                        item.day
+                                                    }
 
-                                        {/* Top */}
-                                        <div className="flex items-center gap-4">
+                                                </div>
 
-                                            {/* Avatar */}
-                                            <div className="relative w-14 h-14 overflow-hidden rounded-full">
+                                                {index !==
+                                                    destination
+                                                        .itinerary
+                                                        .length -
+                                                    1 && (
 
-                                                <Image
-                                                    src={review.image}
-                                                    alt={review.name}
-                                                    fill
-                                                    className="object-cover"
-                                                />
+                                                        <div className="w-1 flex-1 bg-base-300 rounded-full mt-3"></div>
+                                                    )}
                                             </div>
 
-                                            {/* User Info */}
-                                            <div>
+                                            {/* CONTENT */}
 
-                                                <h3 className="font-bold text-lg">
-                                                    {review.name}
+                                            <div className="pb-6">
+
+                                                <h3 className="text-2xl font-black text-base-content">
+
+                                                    {
+                                                        item.title
+                                                    }
+
                                                 </h3>
 
-                                                <p className="text-sm text-gray-500">
-                                                    {review.date}
+                                                <p className="text-base-content/70 mt-4 leading-relaxed">
+
+                                                    {
+                                                        item.description
+                                                    }
+
                                                 </p>
                                             </div>
                                         </div>
-
-                                        {/* Rating */}
-                                        <div className="flex items-center gap-1 mt-5">
-
-                                            {[...Array(Number(review.rating))].map((_, i) => (
-                                                <FaStar
-                                                    key={i}
-                                                    className="text-yellow-400"
-                                                />
-                                            ))}
-                                        </div>
-
-                                        {/* Comment */}
-                                        <p className="text-gray-600 mt-5 leading-relaxed">
-                                            {review.comment}
-                                        </p>
-                                    </div>
-                                ))}
+                                    )
+                                )}
                             </div>
                         </div>
                     </div>
 
                     {/* RIGHT */}
-                    <div>
 
-                        {/* Booking Card */}
-                        <div className="sticky top-28 bg-white rounded-[32px] p-8 shadow-xl border border-slate-100">
+                    <div className="relative">
 
-                            {/* Price */}
-                            <div className="border-b border-slate-200 pb-6">
+                        {/* STICKY CARD */}
 
-                                <p className="text-gray-500">
-                                    Starting From
-                                </p>
+                        <div className="sticky top-28 overflow-hidden rounded-[36px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-8 shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
 
-                                <h2 className="text-5xl font-black text-cyan-600 mt-2">
-                                    ${destination.price}
-                                </h2>
+                            {/* GLOW */}
 
-                                <p className="text-gray-500 mt-1">
-                                    per person
-                                </p>
-                            </div>
+                            <div className="absolute top-0 right-0 w-55 h-55 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-                            {/* Departure */}
-                            <div className="mt-6">
+                            {/* CONTENT */}
 
-                                <label className="text-gray-700 font-semibold block mb-3">
-                                    Departure Date
-                                </label>
+                            <div className="relative">
 
-                                <div className="h-14 rounded-2xl border border-slate-200 flex items-center px-5 text-gray-600">
-                                    {destination.departureDate}
-                                </div>
-                            </div>
+                                {/* PRICE */}
 
-                            {/* Travelers */}
-                            <div className="mt-5">
+                                <div className="border-b border-base-300 pb-7">
 
-                                <label className="text-gray-700 font-semibold block mb-3">
-                                    Travelers
-                                </label>
+                                    <p className="text-base-content/60">
 
-                                <div className="h-14 rounded-2xl border border-slate-200 flex items-center px-5 text-gray-600">
-                                    2 - 10 People
-                                </div>
-                            </div>
+                                        Starting From
 
-                            {/* Button */}
-                            <button className="w-full h-14 rounded-2xl bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-lg transition-all duration-300 shadow-[0_10px_30px_rgba(6,182,212,0.35)] mt-8">
-                                Book Now →
-                            </button>
+                                    </p>
 
-                            {/* Features */}
-                            <div className="space-y-4 mt-8">
+                                    <h2 className="text-5xl font-black text-cyan-500 mt-3">
 
-                                <div className="flex items-center gap-3 text-gray-600">
-                                    <FaCheck className="text-green-500" />
-                                    Free cancellation up to 7 days
+                                        $
+                                        {
+                                            destination.price
+                                        }
+
+                                    </h2>
+
+                                    <p className="text-base-content/60 mt-2">
+
+                                        per person
+
+                                    </p>
                                 </div>
 
-                                <div className="flex items-center gap-3 text-gray-600">
-                                    <FaCheck className="text-green-500" />
-                                    Travel insurance included
+                                {/* DATE */}
+
+                                <div className="mt-7">
+
+                                    <label className="text-base-content font-bold block mb-3">
+
+                                        Departure Date
+
+                                    </label>
+
+                                    <div className="h-14 rounded-2xl border border-base-300 bg-base-100 flex items-center px-5 text-base-content/70">
+
+                                        {
+                                            destination.departureDate
+                                        }
+
+                                    </div>
                                 </div>
 
-                                <div className="flex items-center gap-3 text-gray-600">
-                                    <FaCheck className="text-green-500" />
-                                    24/7 customer support
+                                {/* TRAVELERS */}
+
+                                <div className="mt-6">
+
+                                    <label className="text-base-content font-bold block mb-3">
+
+                                        Travelers
+
+                                    </label>
+
+                                    <div className="h-14 rounded-2xl border border-base-300 bg-base-100 flex items-center px-5 text-base-content/70">
+
+                                        {
+                                            destination.travelers ||
+                                            "2 - 10 Travelers"
+                                        }
+
+                                    </div>
+                                </div>
+
+                                {/* BUTTON */}
+
+                                <button className="w-full h-15 rounded-2xl bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-black text-lg shadow-[0_10px_40px_rgba(6,182,212,0.35)] transition-all duration-500 hover:scale-[1.02] mt-8">
+
+                                    Book Now →
+
+                                </button>
+
+                                {/* FEATURES */}
+
+                                <div className="space-y-5 mt-8">
+
+                                    {[
+                                        "Free cancellation up to 7 days",
+                                        "Travel insurance included",
+                                        "24/7 customer support",
+                                    ].map(
+                                        (
+                                            item,
+                                            index
+                                        ) => (
+
+                                            <div
+                                                key={
+                                                    index
+                                                }
+                                                className="flex items-center gap-4 text-base-content/70"
+                                            >
+
+                                                <div className="w-10 h-10 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center">
+
+                                                    <FaCheck />
+
+                                                </div>
+
+                                                <p>
+
+                                                    {
+                                                        item
+                                                    }
+
+                                                </p>
+                                            </div>
+                                        )
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* REVIEWS */}
+
+                <div className="mt-14 relative overflow-hidden rounded-[36px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-8 md:p-10 shadow-[0_20px_80px_rgba(0,0,0,0.05)]">
+
+                    <h2 className="text-3xl md:text-4xl font-black text-base-content mb-10">
+
+                        Traveler Reviews
+
+                    </h2>
+
+                    {!reviews.length && (
+
+                        <div className="rounded-[32px] border border-dashed border-base-300 bg-base-100/70 p-10 text-center">
+
+                            <h3 className="text-2xl font-black text-base-content">
+
+                                No Reviews Yet
+
+                            </h3>
+
+                            <p className="text-base-content/60 mt-3">
+
+                                This destination
+                                has not received
+                                any traveler
+                                reviews yet.
+
+                            </p>
+                        </div>
+                    )}
+
+                    <div className="space-y-7">
+
+                        {reviews.map(
+                            (
+                                review,
+                                index
+                            ) => (
+
+                                <div
+                                    key={index}
+                                    className="group relative overflow-hidden rounded-[30px] border border-base-300 bg-base-100/70 p-7 hover:shadow-[0_15px_50px_rgba(6,182,212,0.12)] transition-all duration-500"
+                                >
+
+                                    {/* QUOTE */}
+
+                                    <div className="absolute top-6 right-6 text-6xl text-base-content/4">
+
+                                        <FaQuoteRight />
+
+                                    </div>
+
+                                    {/* TOP */}
+
+                                    <div className="flex items-center gap-4">
+
+                                        <div className="relative w-16 h-16 rounded-full overflow-hidden ring-4 ring-cyan-500/10">
+
+                                            <Image
+                                                src={
+                                                    review.image
+                                                }
+                                                alt={
+                                                    review.name
+                                                }
+                                                fill
+                                                unoptimized
+                                                className="object-cover"
+                                            />
+
+                                        </div>
+
+                                        <div>
+
+                                            <h3 className="text-xl font-black text-base-content">
+
+                                                {
+                                                    review.name
+                                                }
+
+                                            </h3>
+
+                                            <p className="text-base-content/60 text-sm mt-1">
+
+                                                {
+                                                    review.date
+                                                }
+
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                    {/* STARS */}
+
+                                    <div className="flex items-center gap-2 mt-6">
+
+                                        {[...Array(
+                                            Number(
+                                                review.rating
+                                            )
+                                        )].map(
+                                            (
+                                                _,
+                                                i
+                                            ) => (
+
+                                                <div
+                                                    key={
+                                                        i
+                                                    }
+                                                    className="w-10 h-10 rounded-xl border border-base-300 bg-base-100 flex items-center justify-center text-yellow-400"
+                                                >
+
+                                                    <FaStar />
+
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+
+                                    {/* COMMENT */}
+
+                                    <p className="text-base-content/70 mt-6 leading-relaxed">
+                                        `{
+                                            review.comment
+                                        }`
+                                    </p>
+                                </div>
+                            )
+                        )}
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     );
 };
 

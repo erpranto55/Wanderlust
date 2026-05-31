@@ -13,7 +13,7 @@ import {
 const NewsletterSection = () => {
 
     return (
-        <section className="relative overflow-hidden py-20 md:py-28 bg-[#020617]">
+        <section className="relative overflow-hidden py-20 md:py-28 bg-base-100 transition-all duration-500">
 
             {/* BACKGROUND EFFECTS */}
 
@@ -29,7 +29,7 @@ const NewsletterSection = () => {
 
                 {/* MAIN CARD */}
 
-                <div className="relative overflow-hidden rounded-[48px] border border-white/10 bg-white/5 backdrop-blur-2xl shadow-[0_30px_120px_rgba(0,0,0,0.35)]">
+                <div className="relative overflow-hidden rounded-[48px] border border-base-300 bg-base-200/60 backdrop-blur-2xl shadow-[0_30px_120px_rgba(0,0,0,0.18)]">
 
                     {/* GRADIENT OVERLAY */}
 
@@ -61,7 +61,7 @@ const NewsletterSection = () => {
 
                             {/* TITLE */}
 
-                            <h2 className="text-4xl md:text-6xl font-black text-white mt-7 leading-tight">
+                            <h2 className="text-4xl md:text-6xl font-black text-base-content mt-7 leading-tight">
 
                                 Unlock Exclusive
                                 <br />
@@ -72,7 +72,7 @@ const NewsletterSection = () => {
 
                             {/* DESCRIPTION */}
 
-                            <p className="text-gray-400 text-lg md:text-xl mt-7 leading-relaxed max-w-2xl">
+                            <p className="text-base-content/70 text-lg md:text-xl mt-7 leading-relaxed max-w-2xl">
 
                                 Subscribe and receive premium travel deals,
                                 destination inspiration, luxury getaway offers,
@@ -86,9 +86,9 @@ const NewsletterSection = () => {
 
                                 {/* ITEM */}
 
-                                <div className="group flex items-start gap-4 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 hover:border-cyan-400/30 transition-all duration-500">
+                                <div className="group flex items-start gap-4 rounded-3xl border border-base-300 bg-base-100/70 backdrop-blur-xl p-5 hover:border-cyan-400/30 transition-all duration-500">
 
-                                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-all duration-500">
+                                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-base-content flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-all duration-500">
 
                                         <FaPlaneDeparture />
 
@@ -96,13 +96,13 @@ const NewsletterSection = () => {
 
                                     <div>
 
-                                        <h4 className="text-white font-bold text-lg">
+                                        <h4 className="text-base-content font-bold text-lg">
 
                                             Weekly Deals
 
                                         </h4>
 
-                                        <p className="text-gray-400 text-sm mt-1 leading-relaxed">
+                                        <p className="text-base-content/70 text-sm mt-1 leading-relaxed">
 
                                             Discover exclusive travel offers every week.
 
@@ -112,9 +112,9 @@ const NewsletterSection = () => {
 
                                 {/* ITEM */}
 
-                                <div className="group flex items-start gap-4 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 hover:border-cyan-400/30 transition-all duration-500">
+                                <div className="group flex items-start gap-4 rounded-3xl border border-base-300 bg-base-100/70 backdrop-blur-xl p-5 hover:border-cyan-400/30 transition-all duration-500">
 
-                                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-all duration-500">
+                                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-base-content flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-all duration-500">
 
                                         <FaMapMarkedAlt />
 
@@ -122,13 +122,13 @@ const NewsletterSection = () => {
 
                                     <div>
 
-                                        <h4 className="text-white font-bold text-lg">
+                                        <h4 className="text-base-content font-bold text-lg">
 
                                             Destination Guides
 
                                         </h4>
 
-                                        <p className="text-gray-400 text-sm mt-1 leading-relaxed">
+                                        <p className="text-base-content/70 text-sm mt-1 leading-relaxed">
 
                                             Get curated travel tips and inspiration.
 
@@ -138,9 +138,9 @@ const NewsletterSection = () => {
 
                                 {/* ITEM */}
 
-                                <div className="group flex items-start gap-4 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 hover:border-cyan-400/30 transition-all duration-500">
+                                <div className="group flex items-start gap-4 rounded-3xl border border-base-300 bg-base-100/70 backdrop-blur-xl p-5 hover:border-cyan-400/30 transition-all duration-500">
 
-                                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-all duration-500">
+                                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-base-content flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-all duration-500">
 
                                         <FaGift />
 
@@ -148,13 +148,13 @@ const NewsletterSection = () => {
 
                                     <div>
 
-                                        <h4 className="text-white font-bold text-lg">
+                                        <h4 className="text-base-content font-bold text-lg">
 
                                             Exclusive Discounts
 
                                         </h4>
 
-                                        <p className="text-gray-400 text-sm mt-1 leading-relaxed">
+                                        <p className="text-base-content/70 text-sm mt-1 leading-relaxed">
 
                                             Access members-only travel discounts.
 
@@ -164,9 +164,9 @@ const NewsletterSection = () => {
 
                                 {/* ITEM */}
 
-                                <div className="group flex items-start gap-4 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 hover:border-cyan-400/30 transition-all duration-500">
+                                <div className="group flex items-start gap-4 rounded-3xl border border-base-300 bg-base-100/70 backdrop-blur-xl p-5 hover:border-cyan-400/30 transition-all duration-500">
 
-                                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-all duration-500">
+                                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-base-content flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-all duration-500">
 
                                         <FaShieldAlt />
 
@@ -174,13 +174,13 @@ const NewsletterSection = () => {
 
                                     <div>
 
-                                        <h4 className="text-white font-bold text-lg">
+                                        <h4 className="text-base-content font-bold text-lg">
 
                                             Secure & Spam Free
 
                                         </h4>
 
-                                        <p className="text-gray-400 text-sm mt-1 leading-relaxed">
+                                        <p className="text-base-content/70 text-sm mt-1 leading-relaxed">
 
                                             Your information stays safe and protected.
 
@@ -196,7 +196,7 @@ const NewsletterSection = () => {
 
                             {/* FORM CARD */}
 
-                            <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/10 backdrop-blur-2xl p-8 md:p-10 shadow-[0_25px_80px_rgba(0,0,0,0.35)]">
+                            <div className="relative overflow-hidden rounded-[40px] border border-base-300 bg-base-100/80 backdrop-blur-2xl p-8 md:p-10 shadow-[0_25px_80px_rgba(0,0,0,0.15)]">
 
                                 {/* SMALL GLOW */}
 
@@ -204,7 +204,7 @@ const NewsletterSection = () => {
 
                                 {/* ICON */}
 
-                                <div className="relative w-24 h-24 rounded-[30px] bg-linear-to-br from-cyan-500 to-blue-600 text-white text-5xl flex items-center justify-center shadow-[0_15px_40px_rgba(6,182,212,0.35)]">
+                                <div className="relative w-24 h-24 rounded-[30px] bg-linear-to-br from-cyan-500 to-blue-600 text-base-content text-5xl flex items-center justify-center shadow-[0_15px_40px_rgba(6,182,212,0.35)]">
 
                                     <FaPaperPlane />
 
@@ -212,7 +212,7 @@ const NewsletterSection = () => {
 
                                 {/* TITLE */}
 
-                                <h3 className="relative text-4xl font-black text-white mt-8 leading-tight">
+                                <h3 className="relative text-4xl font-black text-base-content mt-8 leading-tight">
 
                                     Stay Updated
                                     <br />
@@ -223,7 +223,7 @@ const NewsletterSection = () => {
 
                                 {/* DESCRIPTION */}
 
-                                <p className="relative text-gray-400 mt-6 leading-relaxed text-[15px]">
+                                <p className="relative text-base-content/70 mt-6 leading-relaxed text-[15px]">
 
                                     Join thousands of travelers receiving
                                     premium travel deals, destination updates,
@@ -242,7 +242,7 @@ const NewsletterSection = () => {
                                         <input
                                             type="email"
                                             placeholder="Enter your email address"
-                                            className="w-full h-16 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md px-6 text-white placeholder:text-gray-500 outline-none focus:border-cyan-400/40 transition-all duration-300"
+                                            className="w-full h-16 rounded-2xl border border-base-300 bg-base-200/70 backdrop-blur-md px-6 text-base-content placeholder:text-base-content/40 outline-none focus:border-cyan-400 transition-all duration-300"
                                         />
 
                                     </div>
@@ -251,7 +251,7 @@ const NewsletterSection = () => {
 
                                     <button
                                         type="submit"
-                                        className="group w-full h-16 rounded-2xl bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-black text-lg flex items-center justify-center gap-3 transition-all duration-500 hover:scale-[1.02] shadow-[0_15px_40px_rgba(6,182,212,0.35)]"
+                                        className="group w-full h-16 rounded-2xl bg-linear-to-r from-primary to-info hover:from-cyan-600 hover:to-blue-700 text-base-content font-black text-lg flex items-center justify-center gap-3 transition-all duration-500 hover:scale-[1.02] shadow-[0_15px_40px_rgba(6,182,212,0.35)]"
                                     >
 
                                         Subscribe Now
@@ -267,13 +267,13 @@ const NewsletterSection = () => {
 
                                     <div>
 
-                                        <h4 className="text-white font-bold text-lg">
+                                        <h4 className="text-base-content font-bold text-lg">
 
                                             15K+ Subscribers
 
                                         </h4>
 
-                                        <p className="text-gray-400 text-sm mt-1">
+                                        <p className="text-base-content/70 text-sm mt-1">
 
                                             Join our growing travel community
 
@@ -292,7 +292,7 @@ const NewsletterSection = () => {
 
                     {/* BIG TEXT */}
 
-                    <div className="absolute -bottom-16 -right-4 text-[220px] font-black text-white/3 leading-none select-none">
+                    <div className="absolute -bottom-16 -right-4 text-[220px] font-black text-base-content/3 leading-none select-none">
 
                         TRAVEL
 

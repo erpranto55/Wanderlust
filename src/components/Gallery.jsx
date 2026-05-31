@@ -69,7 +69,7 @@ const galleryImages = [
 const Gallery = () => {
 
     return (
-        <section className="relative overflow-hidden py-20 md:py-24 bg-[#020617]">
+        <section className="relative overflow-hidden py-20 md:py-24 bg-base-100 transition-all duration-500">
 
             {/* BACKGROUND EFFECTS */}
 
@@ -114,7 +114,7 @@ const Gallery = () => {
 
                         {/* DESCRIPTION */}
 
-                        <p className="text-lg md:text-xl text-gray-400 mt-7 leading-relaxed">
+                        <p className="text-lg md:text-xl text-base-content/70 mt-7 leading-relaxed">
 
                             Discover breathtaking destinations, unforgettable
                             adventures, and luxury experiences captured by travelers
@@ -125,7 +125,7 @@ const Gallery = () => {
 
                     {/* RIGHT CARD */}
 
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] px-8 py-7 shadow-[0_10px_50px_rgba(0,0,0,0.18)]">
+                    <div className="bg-base-200/60 backdrop-blur-xl border border-base-300 rounded-[32px] px-8 py-7 shadow-[0_10px_50px_rgba(0,0,0,0.18)]">
 
                         <div className="flex items-center gap-5">
 
@@ -143,7 +143,7 @@ const Gallery = () => {
 
                                 </h3>
 
-                                <p className="text-gray-400 mt-1">
+                                <p className="text-base-content/70 mt-1">
 
                                     Travel Photos
 
@@ -161,7 +161,7 @@ const Gallery = () => {
 
                         <div
                             key={image.id}
-                            className={`group relative overflow-hidden rounded-[36px] ${image.size} border border-white/10 shadow-[0_15px_60px_rgba(0,0,0,0.25)]`}
+                            className={`group relative overflow-hidden rounded-[36px] ${image.size} border border-base-300 shadow-[0_15px_60px_rgba(0,0,0,0.25)]`}
                         >
 
                             {/* IMAGE */}
@@ -175,7 +175,7 @@ const Gallery = () => {
 
                             {/* OVERLAY */}
 
-                            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent"></div>
 
                             {/* HOVER OVERLAY */}
 
@@ -183,7 +183,7 @@ const Gallery = () => {
 
                             {/* PLAY BUTTON */}
 
-                            <div className="absolute top-6 right-6 w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                            <div className="absolute top-6 right-6 w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-base-300 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
 
                                 <FaPlay />
 
@@ -193,7 +193,7 @@ const Gallery = () => {
 
                             <div className="absolute bottom-0 left-0 p-7 text-white">
 
-                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-sm font-semibold">
+                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-base-300 text-sm font-semibold">
 
                                     <FaGlobeAsia />
 
@@ -225,7 +225,7 @@ const Gallery = () => {
 
                 {/* BOTTOM CTA */}
 
-                <div className="mt-20 relative overflow-hidden rounded-[40px] bg-linear-to-r from-cyan-500 via-blue-600 to-indigo-700 p-10 md:p-14 shadow-[0_20px_80px_rgba(6,182,212,0.3)]">
+                <div className="mt-20 relative overflow-hidden rounded-[40px] bg-linear-to-r from-primary via-info to-secondary p-10 md:p-14 shadow-[0_20px_80px_rgba(6,182,212,0.3)]">
 
                     {/* GLOW */}
 
@@ -241,7 +241,7 @@ const Gallery = () => {
 
                             {/* TAG */}
 
-                            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-sm font-semibold">
+                            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-base-300 text-sm font-semibold">
 
                                 <FaCompass />
 

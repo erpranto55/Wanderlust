@@ -9,12 +9,15 @@ import {
     FaGift,
     FaPercent,
     FaStar,
+    FaTag,
 } from "react-icons/fa";
 
 const offers = [
     {
         id: 1,
+
         title: "Summer Beach Escape",
+
         description:
             "Luxury beach resorts, crystal-clear waters, tropical adventures, and unforgettable sunsets.",
 
@@ -27,11 +30,15 @@ const offers = [
             "from-cyan-500/80 via-sky-500/60 to-blue-900/90",
 
         badge: "Trending",
+
+        price: "$1,299",
     },
 
     {
         id: 2,
+
         title: "Luxury Honeymoon Retreat",
+
         description:
             "Romantic overwater villas, private dinners, luxury spas, and premium honeymoon experiences.",
 
@@ -44,11 +51,15 @@ const offers = [
             "from-rose-500/80 via-pink-500/60 to-fuchsia-900/90",
 
         badge: "Premium",
+
+        price: "$2,499",
     },
 
     {
         id: 3,
+
         title: "Mountain Adventure Tour",
+
         description:
             "Explore snowy mountains, scenic hiking trails, and thrilling outdoor adventures.",
 
@@ -61,21 +72,21 @@ const offers = [
             "from-emerald-500/80 via-green-500/60 to-lime-900/90",
 
         badge: "Popular",
+
+        price: "$1,799",
     },
 ];
 
 const SpecialOffers = () => {
 
     return (
-        <section className="relative overflow-hidden py-20 md:py-24 bg-[#020617]">
+        <section className="relative overflow-hidden py-20 md:py-24 bg-base-100 transition-all duration-500">
 
-            {/* BACKGROUND EFFECTS */}
+            {/* BACKGROUND EFFECT */}
 
-            <div className="absolute top-0 left-0 w-125 h-125 bg-cyan-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute top-0 left-0 w-112.5 h-112.5 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-            <div className="absolute bottom-0 right-0 w-125 h-125 bg-blue-500/20 rounded-full blur-3xl"></div>
-
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.12),transparent_40%)]"></div>
+            <div className="absolute bottom-0 right-0 w-112.5 h-112.5 bg-blue-500/10 rounded-full blur-3xl"></div>
 
             {/* CONTAINER */}
 
@@ -83,35 +94,36 @@ const SpecialOffers = () => {
 
                 {/* TOP SECTION */}
 
-                <div className="text-center max-w-4xl mx-auto mb-16">
+                <div className="text-center max-w-4xl mx-auto mb-18">
 
                     {/* TAG */}
 
-                    <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 backdrop-blur-md text-cyan-400 text-sm font-semibold">
+                    <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 backdrop-blur-md text-cyan-500 text-sm font-semibold">
 
                         <FaBolt />
 
-                        Exclusive Travel Deals
+                        Limited Time Offers
 
                     </div>
 
                     {/* TITLE */}
 
-                    <h2 className="text-4xl md:text-6xl font-black text-white mt-6 leading-tight">
+                    <h2 className="text-4xl md:text-6xl font-black text-base-content mt-6 leading-tight">
 
-                        Special Offers
+                        Exclusive Travel Deals
                         <br />
 
-                        You Can’t Miss
+                        Just For You
 
                     </h2>
 
                     {/* DESCRIPTION */}
 
-                    <p className="text-gray-400 text-lg md:text-xl mt-7 leading-relaxed">
+                    <p className="text-lg md:text-xl text-base-content/70 mt-7 leading-relaxed">
 
-                        Discover limited-time travel deals, premium destinations,
-                        and unforgettable experiences at exclusive discounted prices.
+                        Unlock premium destinations, unforgettable
+                        experiences, and luxury travel packages
+                        with exclusive discounts.
 
                     </p>
                 </div>
@@ -124,140 +136,146 @@ const SpecialOffers = () => {
 
                         <div
                             key={offer.id}
-                            className="group relative overflow-hidden rounded-[40px] h-150 border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.45)] hover:-translate-y-3 transition-all duration-700"
+                            className="group relative overflow-hidden rounded-[40px] border border-base-300 bg-base-200/60 backdrop-blur-xl hover:-translate-y-3 transition-all duration-700 shadow-[0_20px_60px_rgba(0,0,0,0.08)] hover:shadow-[0_25px_80px_rgba(6,182,212,0.18)]"
                         >
 
                             {/* IMAGE */}
 
-                            <Image
-                                src={offer.image}
-                                alt={offer.title}
-                                fill
-                                className="object-cover group-hover:scale-110 transition-all duration-1000"
-                            />
+                            <div className="relative h-140 overflow-hidden">
 
-                            {/* DARK OVERLAY */}
+                                <Image
+                                    src={offer.image}
+                                    alt={offer.title}
+                                    fill
+                                    unoptimized
+                                    className="object-cover group-hover:scale-110 transition-all duration-1000"
+                                />
 
-                            <div className={`absolute inset-0 bg-linear-to-b ${offer.gradient}`}></div>
+                                {/* OVERLAY */}
 
-                            {/* GLOW */}
+                                <div className={`absolute inset-0 bg-linear-to-b ${offer.gradient}`}></div>
 
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-white/10 transition-all duration-700"></div>
+                                <div className="absolute inset-0 bg-black/20"></div>
 
-                            {/* TOP BADGES */}
+                                {/* TOP */}
 
-                            <div className="absolute top-6 left-6 right-6 z-20 flex items-center justify-between">
+                                <div className="absolute top-6 left-6 right-6 z-20 flex items-center justify-between">
 
-                                {/* DISCOUNT */}
+                                    {/* DISCOUNT */}
 
-                                <div className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/15 backdrop-blur-xl border border-white/20 text-white font-bold shadow-lg">
+                                    <div className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/15 backdrop-blur-xl border border-white/10 text-white font-bold shadow-lg">
 
-                                    <FaPercent />
+                                        <FaPercent />
 
-                                    {offer.discount}
+                                        {offer.discount}
 
-                                </div>
-
-                                {/* TAG */}
-
-                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white text-sm font-semibold">
-
-                                    <FaFire className="text-orange-400" />
-
-                                    {offer.badge}
-
-                                </div>
-                            </div>
-
-                            {/* CONTENT */}
-
-                            <div className="relative z-10 h-full flex flex-col justify-end p-8">
-
-                                {/* SMALL ICON */}
-
-                                <div className="w-16 h-16 rounded-3xl bg-white/15 backdrop-blur-md border border-white/10 text-white text-2xl flex items-center justify-center shadow-xl mb-6">
-
-                                    <FaGift />
-
-                                </div>
-
-                                {/* TITLE */}
-
-                                <h3 className="text-4xl font-black text-white leading-tight">
-
-                                    {offer.title}
-
-                                </h3>
-
-                                {/* DESCRIPTION */}
-
-                                <p className="text-white/80 mt-5 leading-relaxed text-[15px]">
-
-                                    {offer.description}
-
-                                </p>
-
-                                {/* RATING */}
-
-                                <div className="flex items-center gap-2 mt-6">
-
-                                    {[...Array(5)].map((_, index) => (
-
-                                        <FaStar
-                                            key={index}
-                                            className="text-yellow-400"
-                                        />
-                                    ))}
-
-                                    <span className="text-white/80 text-sm ml-2">
-
-                                        4.9 Rating
-
-                                    </span>
-                                </div>
-
-                                {/* BOTTOM */}
-
-                                <div className="flex items-center justify-between mt-8">
-
-                                    {/* PRICE */}
-
-                                    <div>
-
-                                        <p className="text-white/60 text-sm">
-                                            Starting From
-                                        </p>
-
-                                        <h4 className="text-3xl font-black text-white mt-1">
-
-                                            $1,299
-
-                                        </h4>
                                     </div>
 
-                                    {/* BUTTON */}
+                                    {/* BADGE */}
 
-                                    <Link
-                                        href="/destination"
-                                        className="group/button w-16 h-16 rounded-2xl bg-white text-slate-900 hover:bg-cyan-500 hover:text-white flex items-center justify-center text-xl shadow-2xl transition-all duration-500 hover:scale-110"
-                                    >
+                                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white text-sm font-semibold">
 
-                                        <FaArrowRight className="group-hover/button:translate-x-1 transition-all duration-300" />
+                                        <FaFire className="text-orange-400" />
 
-                                    </Link>
+                                        {offer.badge}
+
+                                    </div>
                                 </div>
 
-                                {/* BOTTOM LINE */}
+                                {/* CONTENT */}
 
-                                <div className="w-14 group-hover:w-full h-1 rounded-full bg-linear-to-r from-cyan-400 to-blue-500 mt-8 transition-all duration-700"></div>
-                            </div>
+                                <div className="relative z-10 h-full flex flex-col justify-end p-8 text-white">
 
-                            {/* BIG NUMBER */}
+                                    {/* ICON */}
 
-                            <div className="absolute -bottom-8 -right-2 text-[180px] font-black text-white/5 group-hover:text-white/10 transition-all duration-700 leading-none">
+                                    <div className="w-18 h-18 rounded-[28px] bg-white/15 backdrop-blur-md border border-white/10 text-white text-3xl flex items-center justify-center shadow-xl mb-7">
 
-                                0{offer.id}
+                                        <FaGift />
 
+                                    </div>
+
+                                    {/* TITLE */}
+
+                                    <h3 className="text-4xl font-black leading-tight">
+
+                                        {offer.title}
+
+                                    </h3>
+
+                                    {/* DESCRIPTION */}
+
+                                    <p className="text-white/80 mt-5 leading-relaxed text-[15px]">
+
+                                        {offer.description}
+
+                                    </p>
+
+                                    {/* RATING */}
+
+                                    <div className="flex items-center gap-2 mt-6">
+
+                                        {[...Array(5)].map((_, index) => (
+
+                                            <FaStar
+                                                key={index}
+                                                className="text-yellow-400"
+                                            />
+                                        ))}
+
+                                        <span className="text-white/80 text-sm ml-2">
+
+                                            4.9 Rating
+
+                                        </span>
+                                    </div>
+
+                                    {/* PRICE + BUTTON */}
+
+                                    <div className="flex items-end justify-between mt-9">
+
+                                        {/* PRICE */}
+
+                                        <div>
+
+                                            <p className="text-white/60 text-sm flex items-center gap-2">
+
+                                                <FaTag />
+
+                                                Starting From
+
+                                            </p>
+
+                                            <h4 className="text-4xl font-black mt-2">
+
+                                                {offer.price}
+
+                                            </h4>
+                                        </div>
+
+                                        {/* BUTTON */}
+
+                                        <Link
+                                            href="/destination"
+                                            className="group/button w-16 h-16 rounded-2xl bg-white text-slate-900 hover:bg-cyan-500 hover:text-white flex items-center justify-center text-xl shadow-2xl transition-all duration-500 hover:scale-110"
+                                        >
+
+                                            <FaArrowRight className="group-hover/button:translate-x-1 transition-all duration-300" />
+
+                                        </Link>
+                                    </div>
+
+                                    {/* LINE */}
+
+                                    <div className="w-14 group-hover:w-full h-1 rounded-full bg-linear-to-r from-cyan-400 to-blue-500 mt-8 transition-all duration-700"></div>
+                                </div>
+
+                                {/* BIG NUMBER */}
+
+                                <div className="absolute -bottom-10 -right-2 text-[180px] font-black text-white/5 group-hover:text-white/8 transition-all duration-700 leading-none">
+
+                                    0{offer.id}
+
+                                </div>
                             </div>
                         </div>
                     ))}

@@ -1,12 +1,59 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
-import { HiMenuAlt3, HiX } from "react-icons/hi";
+import React, { useEffect, useState } from "react";
+
+import {
+    HiMenuAlt3,
+    HiX,
+} from "react-icons/hi";
+
+import {
+    FaMoon,
+    FaSun,
+} from "react-icons/fa";
 
 const Navbar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
+
+    const [theme, setTheme] = useState("light");
+
+    useEffect(() => {
+
+        const savedTheme =
+            localStorage.getItem("theme") || "light";
+
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setTheme(savedTheme);
+
+        document.documentElement.setAttribute(
+            "data-theme",
+            savedTheme
+        );
+
+    }, []);
+
+
+    const toggleTheme = () => {
+
+        const newTheme =
+            theme === "light"
+                ? "dark"
+                : "light";
+
+        setTheme(newTheme);
+
+        localStorage.setItem(
+            "theme",
+            newTheme
+        );
+
+        document.documentElement.setAttribute(
+            "data-theme",
+            newTheme
+        );
+    };
 
     const navLinks = (
         <>
@@ -49,35 +96,64 @@ const Navbar = () => {
     );
 
     return (
-        <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200">
+        <nav className="sticky top-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-500">
 
             <div className="max-w-7xl mx-auto px-4">
 
                 <div className="flex justify-between items-center h-20">
 
-                    {/* Logo */}
+                    {/* LOGO */}
+
                     <div>
+
                         <Link href="/">
+
                             <h1 className="text-3xl md:text-4xl font-extrabold bg-linear-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
+
                                 WanderLust
+
                             </h1>
+
                         </Link>
+
                     </div>
 
-                    {/* Desktop Menu */}
-                    <ul className="hidden lg:flex items-center gap-8 text-gray-700 font-medium">
+                    {/* DESKTOP MENU */}
+
+                    <ul className="hidden lg:flex items-center gap-8 text-gray-700 dark:text-gray-200 font-medium">
+
                         {navLinks}
+
                     </ul>
 
-                    {/* Desktop Auth Buttons */}
+                    {/* RIGHT SIDE */}
+
                     <div className="hidden lg:flex items-center gap-4">
+
+                        {/* THEME BUTTON */}
+
+                        <button
+                            onClick={toggleTheme}
+                            className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:scale-110 transition-all duration-300 flex items-center justify-center text-xl text-slate-700 dark:text-yellow-400 shadow-md"
+                        >
+
+                            {theme === "light"
+                                ? <FaMoon />
+                                : <FaSun />
+                            }
+
+                        </button>
+
+                        {/* PROFILE */}
 
                         <Link
                             href="/profile"
-                            className="hover:text-cyan-500 transition-all duration-300 font-medium"
+                            className="hover:text-cyan-500 dark:text-gray-200 transition-all duration-300 font-medium"
                         >
                             Profile
                         </Link>
+
+                        {/* LOGIN */}
 
                         <Link
                             href="/login"
@@ -85,6 +161,8 @@ const Navbar = () => {
                         >
                             Login
                         </Link>
+
+                        {/* SIGNUP */}
 
                         <Link
                             href="/signup"
@@ -94,29 +172,59 @@ const Navbar = () => {
                         </Link>
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="lg:hidden text-3xl text-gray-700"
-                    >
-                        {isOpen ? <HiX /> : <HiMenuAlt3 />}
-                    </button>
+                    {/* MOBILE RIGHT */}
+
+                    <div className="flex lg:hidden items-center gap-3">
+
+                        {/* MOBILE THEME BUTTON */}
+
+                        <button
+                            onClick={toggleTheme}
+                            className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg text-slate-700 dark:text-yellow-400 transition-all duration-300"
+                        >
+
+                            {theme === "light"
+                                ? <FaMoon />
+                                : <FaSun />
+                            }
+
+                        </button>
+
+                        {/* MENU BUTTON */}
+
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="text-3xl text-gray-700 dark:text-gray-200"
+                        >
+
+                            {isOpen
+                                ? <HiX />
+                                : <HiMenuAlt3 />
+                            }
+
+                        </button>
+                    </div>
                 </div>
 
-                {/* Mobile Menu */}
+                {/* MOBILE MENU */}
+
                 {isOpen && (
+
                     <div className="lg:hidden pb-6">
 
-                        <ul className="flex flex-col gap-5 text-gray-700 font-medium border-t border-slate-200 pt-5">
+                        <ul className="flex flex-col gap-5 text-gray-700 dark:text-gray-200 font-medium border-t border-slate-200 dark:border-slate-800 pt-5">
+
                             {navLinks}
+
                         </ul>
 
-                        {/* Mobile Buttons */}
+                        {/* MOBILE BUTTONS */}
+
                         <div className="flex flex-col gap-4 mt-6">
 
                             <Link
                                 href="/profile"
-                                className="text-center py-3 rounded-xl border border-slate-300 hover:bg-slate-100 transition-all duration-300"
+                                className="text-center py-3 rounded-xl border border-slate-300 dark:border-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
                             >
                                 Profile
                             </Link>

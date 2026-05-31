@@ -15,9 +15,9 @@ export default function Home() {
       <PopularDestinations />
       <WhyChooseUs />
       <TravelCategories />
+      <Gallery />
       <SpecialOffers />
       <TravelerReviews />
-      <Gallery />
       <StatisticsSection />
       <NewsletterSection />
     </div>

@@ -4,15 +4,20 @@ import {
     FaAward,
     FaGlobeAsia,
     FaHeadset,
+    FaRocket,
     FaUsers,
 } from "react-icons/fa";
 
 const stats = [
     {
         id: 1,
+
         icon: <FaUsers />,
+
         number: "15K+",
+
         title: "Happy Travelers",
+
         description:
             "Thousands of travelers trust us for unforgettable journeys worldwide.",
 
@@ -22,9 +27,13 @@ const stats = [
 
     {
         id: 2,
+
         icon: <FaGlobeAsia />,
+
         number: "120+",
+
         title: "Destinations",
+
         description:
             "Explore breathtaking destinations across beaches, mountains, cities, and more.",
 
@@ -34,9 +43,13 @@ const stats = [
 
     {
         id: 3,
+
         icon: <FaAward />,
+
         number: "98%",
+
         title: "Satisfaction Rate",
+
         description:
             "Exceptional travel experiences with premium service and customer care.",
 
@@ -46,9 +59,13 @@ const stats = [
 
     {
         id: 4,
+
         icon: <FaHeadset />,
+
         number: "24/7",
+
         title: "Customer Support",
+
         description:
             "Dedicated support team available anytime during your travel experience.",
 
@@ -60,15 +77,13 @@ const stats = [
 const StatisticsSection = () => {
 
     return (
-        <section className="relative overflow-hidden py-20 md:py-24 bg-linear-to-b from-slate-950 via-[#020617] to-slate-950">
+        <section className="relative overflow-hidden py-20 md:py-24 bg-base-100 transition-all duration-500">
 
-            {/* BACKGROUND EFFECTS */}
+            {/* BACKGROUND EFFECT */}
 
-            <div className="absolute top-0 left-0 w-125 h-125 bg-cyan-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute top-0 left-0 w-112.5 h-112.5 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-            <div className="absolute bottom-0 right-0 w-125 h-125 bg-blue-500/20 rounded-full blur-3xl"></div>
-
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.10),transparent_40%)]"></div>
+            <div className="absolute bottom-0 right-0 w-112.5 h-112.5 bg-blue-500/10 rounded-full blur-3xl"></div>
 
             {/* CONTAINER */}
 
@@ -76,40 +91,41 @@ const StatisticsSection = () => {
 
                 {/* TOP */}
 
-                <div className="text-center max-w-4xl mx-auto mb-16">
+                <div className="text-center max-w-4xl mx-auto mb-18">
 
                     {/* TAG */}
 
-                    <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 backdrop-blur-md text-cyan-400 text-sm font-semibold">
+                    <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 backdrop-blur-md text-cyan-500 text-sm font-semibold">
 
-                        <FaAward />
+                        <FaRocket />
 
-                        Our Achievements
+                        Trusted Worldwide
 
                     </div>
 
                     {/* TITLE */}
 
-                    <h2 className="text-4xl md:text-6xl font-black text-white mt-6 leading-tight">
+                    <h2 className="text-4xl md:text-6xl font-black text-base-content mt-6 leading-tight">
 
                         Trusted By Travelers
                         <br />
 
-                        Around The World
+                        Across The Globe
 
                     </h2>
 
                     {/* DESCRIPTION */}
 
-                    <p className="text-lg md:text-xl text-gray-400 mt-7 leading-relaxed">
+                    <p className="text-lg md:text-xl text-base-content/70 mt-7 leading-relaxed">
 
-                        Delivering unforgettable travel experiences with premium
-                        destinations, world-class support, and trusted service.
+                        Delivering unforgettable journeys, luxury
+                        travel experiences, and world-class customer
+                        support for travelers worldwide.
 
                     </p>
                 </div>
 
-                {/* STATS GRID */}
+                {/* GRID */}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
 
@@ -117,7 +133,7 @@ const StatisticsSection = () => {
 
                         <div
                             key={stat.id}
-                            className="group relative overflow-hidden rounded-[36px] bg-white/5 backdrop-blur-xl border border-white/10 hover:border-cyan-400/30 p-8 transition-all duration-700 hover:-translate-y-3 hover:shadow-[0_25px_80px_rgba(6,182,212,0.18)]"
+                            className="group relative overflow-hidden rounded-[36px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-8 transition-all duration-700 hover:-translate-y-3 hover:shadow-[0_25px_80px_rgba(6,182,212,0.18)]"
                         >
 
                             {/* HOVER OVERLAY */}
@@ -134,7 +150,7 @@ const StatisticsSection = () => {
 
                                 {/* ICON */}
 
-                                <div className={`w-20 h-20 rounded-[28px] bg-linear-to-br ${stat.gradient} text-white text-4xl flex items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.25)] group-hover:scale-110 group-hover:rotate-6 transition-all duration-700`}>
+                                <div className={`w-20 h-20 rounded-[28px] bg-linear-to-br ${stat.gradient} text-white text-4xl flex items-center justify-center shadow-[0_15px_40px_rgba(0,0,0,0.25)] group-hover:scale-110 group-hover:rotate-6 transition-all duration-700`}>
 
                                     {stat.icon}
 
@@ -142,7 +158,7 @@ const StatisticsSection = () => {
 
                                 {/* NUMBER */}
 
-                                <h3 className="text-5xl md:text-6xl font-black text-white mt-8 leading-none">
+                                <h3 className="text-5xl md:text-6xl font-black text-base-content group-hover:text-white mt-8 leading-none transition-all duration-500">
 
                                     {stat.number}
 
@@ -150,7 +166,7 @@ const StatisticsSection = () => {
 
                                 {/* TITLE */}
 
-                                <h4 className="text-2xl font-black text-white mt-5">
+                                <h4 className="text-2xl font-black text-base-content group-hover:text-white mt-5 transition-all duration-500">
 
                                     {stat.title}
 
@@ -158,7 +174,7 @@ const StatisticsSection = () => {
 
                                 {/* DESCRIPTION */}
 
-                                <p className="text-gray-400 group-hover:text-white/80 leading-relaxed mt-5 text-[15px] transition-all duration-500">
+                                <p className="text-base-content/70 group-hover:text-white/80 leading-relaxed mt-5 text-[15px] transition-all duration-500">
 
                                     {stat.description}
 
@@ -171,7 +187,7 @@ const StatisticsSection = () => {
 
                             {/* BIG NUMBER */}
 
-                            <div className="absolute -bottom-10 -right-2 text-[180px] font-black text-white/3 group-hover:text-white/8 transition-all duration-700 leading-none">
+                            <div className="absolute -bottom-10 -right-2 text-[180px] font-black text-base-content/3 group-hover:text-white/8 transition-all duration-700 leading-none">
 
                                 0{stat.id}
 
@@ -180,9 +196,9 @@ const StatisticsSection = () => {
                     ))}
                 </div>
 
-                {/* BOTTOM BANNER */}
+                {/* BOTTOM CTA */}
 
-                <div className="mt-20 relative overflow-hidden rounded-[40px] border border-white/10 bg-white/5 backdrop-blur-xl p-10 md:p-14 shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+                <div className="mt-20 relative overflow-hidden rounded-[40px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-10 md:p-14 shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
 
                     {/* GLOW */}
 
@@ -196,7 +212,7 @@ const StatisticsSection = () => {
 
                         <div className="max-w-3xl">
 
-                            <h3 className="text-4xl md:text-5xl font-black text-white leading-tight">
+                            <h3 className="text-4xl md:text-5xl font-black text-base-content leading-tight">
 
                                 Your Dream Journey
                                 <br />
@@ -205,10 +221,11 @@ const StatisticsSection = () => {
 
                             </h3>
 
-                            <p className="text-gray-400 text-lg mt-6 leading-relaxed">
+                            <p className="text-base-content/70 text-lg mt-6 leading-relaxed">
 
-                                Join thousands of travelers exploring breathtaking
-                                destinations and premium travel experiences worldwide.
+                                Join thousands of travelers exploring
+                                breathtaking destinations and premium
+                                travel experiences worldwide.
 
                             </p>
                         </div>

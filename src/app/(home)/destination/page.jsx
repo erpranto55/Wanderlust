@@ -3,11 +3,13 @@ import Link from "next/link";
 import React from "react";
 
 import {
+    FaArrowRight,
     FaCalendarAlt,
+    FaFilter,
+    FaMapMarkerAlt,
     FaMoneyBillWave,
     FaSortAmountDown,
     FaUmbrellaBeach,
-    FaMapMarkerAlt,
 } from "react-icons/fa";
 
 import { IoLocation } from "react-icons/io5";
@@ -23,232 +25,491 @@ const Destination = async ({ searchParams }) => {
     const duration = params?.duration || "";
     const budget = params?.budget || "";
 
-    const res = await fetch("http://localhost:5000/destination", {
-        cache: "no-store",
-    });
+    const res = await fetch(
+        "http://localhost:5000/destination",
+        {
+            cache: "no-store",
+        }
+    );
 
-    let destinations = await res.json();
+    let destinations =
+        await res.json();
 
-    // Search by location
+    // SEARCH BY LOCATION
+
     if (location) {
-        destinations = destinations.filter((item) =>
-            item.country
-                .toLowerCase()
-                .includes(location.toLowerCase()) ||
-            item.destinationName
-                .toLowerCase()
-                .includes(location.toLowerCase())
-        );
+
+        destinations =
+            destinations.filter(
+                (item) =>
+                    item.country
+                        .toLowerCase()
+                        .includes(
+                            location.toLowerCase()
+                        ) ||
+                    item.destinationName
+                        .toLowerCase()
+                        .includes(
+                            location.toLowerCase()
+                        )
+            );
     }
 
-    // Filter by duration
+    // FILTER DURATION
+
     if (duration) {
-        destinations = destinations.filter((item) =>
-            item.duration.includes(duration)
-        );
+
+        destinations =
+            destinations.filter(
+                (item) =>
+                    item.duration.includes(
+                        duration
+                    )
+            );
     }
 
-    // Filter by budget
+    // FILTER BUDGET
+
     if (budget) {
-        destinations = destinations.filter(
-            (item) => Number(item.price) <= Number(budget)
-        );
+
+        destinations =
+            destinations.filter(
+                (item) =>
+                    Number(item.price) <=
+                    Number(budget)
+            );
     }
 
-    // Filter by category
+    // FILTER CATEGORY
+
     if (category) {
-        destinations = destinations.filter(
-            (item) => item.category === category
-        );
+
+        destinations =
+            destinations.filter(
+                (item) =>
+                    item.category ===
+                    category
+            );
     }
 
-    // Sort by price
+    // SORT PRICE
+
     if (sort === "low") {
-        destinations.sort((a, b) => a.price - b.price);
+
+        destinations.sort(
+            (a, b) =>
+                a.price - b.price
+        );
     }
 
     if (sort === "high") {
-        destinations.sort((a, b) => b.price - a.price);
+
+        destinations.sort(
+            (a, b) =>
+                b.price - a.price
+        );
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-14">
+        <section className="relative overflow-hidden py-20 md:py-24 bg-base-100 transition-all duration-500">
 
-            {/* Header */}
-            <div className="mb-10">
+            {/* BACKGROUND EFFECT */}
 
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-                    Explore All Destinations
-                </h1>
+            <div className="absolute top-0 left-0 w-112.5 h-112.5 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-                <p className="text-gray-500 mt-3 text-lg">
-                    Find your perfect travel experience from our curated collection
-                </p>
-            </div>
+            <div className="absolute bottom-0 right-0 w-112.5 h-112.5 bg-blue-500/10 rounded-full blur-3xl"></div>
 
-            {/* Active Filters */}
-            <div className="flex flex-wrap gap-3 mb-8">
+            {/* CONTAINER */}
 
-                {location && (
-                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
-                        <FaMapMarkerAlt />
-                        {location}
-                    </div>
-                )}
+            <div className="relative max-w-7xl mx-auto px-4">
 
-                {duration && (
-                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
-                        <FaCalendarAlt />
-                        {duration}
-                    </div>
-                )}
+                {/* HEADER */}
 
-                {budget && (
-                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
-                        <FaMoneyBillWave />
-                        Under ${budget}
-                    </div>
-                )}
+                <div className="text-center max-w-4xl mx-auto mb-16">
 
-                {category && (
-                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
+                    {/* TAG */}
+
+                    <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 backdrop-blur-md text-cyan-500 text-sm font-semibold">
+
                         <FaUmbrellaBeach />
-                        {category}
+
+                        Explore Destinations
+
                     </div>
-                )}
 
-                {sort && (
-                    <div className="px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium flex items-center gap-2">
-                        <FaSortAmountDown />
-                        {sort === "low"
-                            ? "Low to High"
-                            : "High to Low"}
-                    </div>
-                )}
-            </div>
+                    {/* TITLE */}
 
-            {/* Filters */}
-            <form className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
+                    <h1 className="text-4xl md:text-6xl font-black text-base-content mt-6 leading-tight">
 
-                {/* Category */}
-                <select
-                    name="category"
-                    defaultValue={category}
-                    className="border border-gray-300 rounded-2xl px-4 h-14 outline-none focus:border-cyan-500"
-                >
-                    <option value="">All Categories</option>
-                    <option value="Beach">Beach</option>
-                    <option value="Mountain">Mountain</option>
-                    <option value="City">City</option>
-                    <option value="Adventure">Adventure</option>
-                    <option value="Luxury">Luxury</option>
-                    <option value="Cultural">Cultural</option>
-                </select>
+                        Find Your Perfect
+                        <br />
 
-                {/* Sort */}
-                <select
-                    name="sort"
-                    defaultValue={sort}
-                    className="border border-gray-300 rounded-2xl px-4 h-14 outline-none focus:border-cyan-500"
-                >
-                    <option value="">Sort By Price</option>
-                    <option value="low">Low to High</option>
-                    <option value="high">High to Low</option>
-                </select>
+                        Travel Destination
 
-                {/* Apply */}
-                <button
-                    type="submit"
-                    className="h-14 rounded-2xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold transition-all duration-300"
-                >
-                    Apply Filters
-                </button>
+                    </h1>
 
-                {/* Clear */}
-                <Link
-                    href="/destination"
-                    className="h-14 rounded-2xl border border-gray-300 flex items-center justify-center font-semibold hover:bg-gray-100 transition-all duration-300"
-                >
-                    Clear Filters
-                </Link>
-            </form>
+                    {/* DESCRIPTION */}
 
-            {/* Total */}
-            <p className="text-gray-500 mb-8">
-                Showing {destinations.length} destinations
-            </p>
+                    <p className="text-lg md:text-xl text-base-content/70 mt-7 leading-relaxed">
 
-            {/* Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        Discover breathtaking destinations,
+                        luxury experiences, and unforgettable
+                        adventures curated for every traveler.
 
-                {destinations.map((destination) => (
+                    </p>
+                </div>
 
-                    <div
-                        key={destination._id}
-                        className="group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
-                    >
+                {/* ACTIVE FILTERS */}
 
-                        {/* Image */}
-                        <div className="relative h-64 overflow-hidden">
+                {(location ||
+                    duration ||
+                    budget ||
+                    category ||
+                    sort) && (
 
-                            <Image
-                                src={destination.imageUrl}
-                                alt={destination.destinationName}
-                                fill
-                                className="object-cover group-hover:scale-110 transition-transform duration-700"
-                            />
+                        <div className="flex flex-wrap gap-4 mb-10">
 
-                            {/* Category */}
-                            <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-semibold shadow">
-                                {destination.category}
-                            </div>
+                            {location && (
+
+                                <div className="px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-cyan-500 text-sm font-semibold flex items-center gap-2">
+
+                                    <FaMapMarkerAlt />
+
+                                    {location}
+
+                                </div>
+                            )}
+
+                            {duration && (
+
+                                <div className="px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-cyan-500 text-sm font-semibold flex items-center gap-2">
+
+                                    <FaCalendarAlt />
+
+                                    {duration}
+
+                                </div>
+                            )}
+
+                            {budget && (
+
+                                <div className="px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-cyan-500 text-sm font-semibold flex items-center gap-2">
+
+                                    <FaMoneyBillWave />
+
+                                    Under ${budget}
+
+                                </div>
+                            )}
+
+                            {category && (
+
+                                <div className="px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-cyan-500 text-sm font-semibold flex items-center gap-2">
+
+                                    <FaUmbrellaBeach />
+
+                                    {category}
+
+                                </div>
+                            )}
+
+                            {sort && (
+
+                                <div className="px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-cyan-500 text-sm font-semibold flex items-center gap-2">
+
+                                    <FaSortAmountDown />
+
+                                    {sort === "low"
+                                        ? "Low to High"
+                                        : "High to Low"}
+
+                                </div>
+                            )}
                         </div>
+                    )}
 
-                        {/* Content */}
-                        <div className="p-6">
+                {/* FILTER CARD */}
 
-                            {/* Country */}
-                            <p className="text-sm text-gray-500 flex gap-2 items-center">
-                                <IoLocation />
-                                {destination.country}
-                            </p>
+                <div className="relative overflow-hidden rounded-[40px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-6 md:p-8 shadow-[0_20px_80px_rgba(0,0,0,0.05)] mb-14">
 
-                            {/* Title & Price */}
-                            <div className="flex items-center justify-between mt-2 gap-4">
+                    {/* GLOW */}
 
-                                <h2 className="text-2xl font-bold text-gray-900">
-                                    {destination.destinationName}
-                                </h2>
+                    <div className="absolute top-0 right-0 w-62.5 h-62.5 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-                                <h3 className="text-cyan-600 font-bold text-lg whitespace-nowrap">
-                                    ${destination.price}
-                                </h3>
-                            </div>
+                    {/* FORM */}
 
-                            {/* Duration */}
-                            <p className="text-gray-500 mt-3 flex gap-2 items-center">
-                                <FaCalendarAlt />
-                                {destination.duration}
-                            </p>
+                    <form className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
 
-                            {/* Description */}
-                            <p className="text-gray-500 text-sm mt-3 line-clamp-2">
-                                {destination.description}
-                            </p>
+                        {/* CATEGORY */}
 
-                            {/* Button */}
-                            <Link
-                                href={`/destination/${destination._id}`}
+                        <div>
+
+                            <label className="text-base-content font-semibold mb-3 flex items-center gap-2">
+
+                                <FaUmbrellaBeach className="text-cyan-500" />
+
+                                Category
+
+                            </label>
+
+                            <select
+                                name="category"
+                                defaultValue={
+                                    category
+                                }
+                                className="w-full h-14 rounded-2xl border border-base-300 bg-base-100 px-5 text-base-content outline-none focus:border-cyan-500 transition-all duration-300"
                             >
-                                <button className="mt-6 w-full h-12 rounded-2xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold transition-all duration-300 cursor-pointer">
-                                    View Details
-                                </button>
-                            </Link>
+
+                                <option value="">
+                                    All Categories
+                                </option>
+
+                                <option value="Beach">
+                                    Beach
+                                </option>
+
+                                <option value="Mountain">
+                                    Mountain
+                                </option>
+
+                                <option value="City">
+                                    City
+                                </option>
+
+                                <option value="Adventure">
+                                    Adventure
+                                </option>
+
+                                <option value="Luxury">
+                                    Luxury
+                                </option>
+
+                                <option value="Cultural">
+                                    Cultural
+                                </option>
+
+                            </select>
                         </div>
-                    </div>
-                ))}
+
+                        {/* SORT */}
+
+                        <div>
+
+                            <label className="text-base-content font-semibold mb-3 flex items-center gap-2">
+
+                                <FaSortAmountDown className="text-cyan-500" />
+
+                                Sort Price
+
+                            </label>
+
+                            <select
+                                name="sort"
+                                defaultValue={
+                                    sort
+                                }
+                                className="w-full h-14 rounded-2xl border border-base-300 bg-base-100 px-5 text-base-content outline-none focus:border-cyan-500 transition-all duration-300"
+                            >
+
+                                <option value="">
+                                    Sort By Price
+                                </option>
+
+                                <option value="low">
+                                    Low to High
+                                </option>
+
+                                <option value="high">
+                                    High to Low
+                                </option>
+
+                            </select>
+                        </div>
+
+                        {/* APPLY */}
+
+                        <button
+                            type="submit"
+                            className="group mt-auto h-14 rounded-2xl bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold shadow-[0_10px_40px_rgba(6,182,212,0.35)] transition-all duration-500 hover:scale-[1.02] flex items-center justify-center gap-3"
+                        >
+
+                            <FaFilter />
+
+                            Apply Filters
+
+                        </button>
+
+                        {/* CLEAR */}
+
+                        <Link
+                            href="/destination"
+                            className="mt-auto h-14 rounded-2xl border border-base-300 bg-base-100 hover:bg-base-300 text-base-content font-bold transition-all duration-300 flex items-center justify-center"
+                        >
+
+                            Clear Filters
+
+                        </Link>
+                    </form>
+                </div>
+
+                {/* TOTAL */}
+
+                <div className="flex items-center justify-between mb-10">
+
+                    <p className="text-base-content/70 text-lg">
+
+                        Showing
+                        <span className="text-cyan-500 font-bold mx-2">
+
+                            {destinations.length}
+
+                        </span>
+
+                        destinations
+
+                    </p>
+                </div>
+
+                {/* GRID */}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
+                    {destinations.map(
+                        (
+                            destination,
+                            index
+                        ) => (
+
+                            <div
+                                key={
+                                    destination._id
+                                }
+                                className="group relative overflow-hidden rounded-[38px] border border-base-300 bg-base-200/60 backdrop-blur-xl hover:-translate-y-3 transition-all duration-700 shadow-[0_20px_60px_rgba(0,0,0,0.08)] hover:shadow-[0_25px_80px_rgba(6,182,212,0.18)]"
+                            >
+
+                                {/* IMAGE */}
+
+                                <div className="relative h-80 overflow-hidden">
+
+                                    <Image
+                                        src={
+                                            destination.imageUrl
+                                        }
+                                        alt={
+                                            destination.destinationName
+                                        }
+                                        fill
+                                        unoptimized
+                                        className="object-cover group-hover:scale-110 transition-all duration-1000"
+                                    />
+
+                                    {/* OVERLAY */}
+
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent"></div>
+
+                                    {/* CATEGORY */}
+
+                                    <div className="absolute top-6 right-6 px-4 py-2 rounded-full bg-cyan-500 text-white text-sm font-bold shadow-lg">
+
+                                        {
+                                            destination.category
+                                        }
+
+                                    </div>
+
+                                    {/* COUNTRY */}
+
+                                    <div className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white text-sm font-semibold">
+
+                                        <IoLocation />
+
+                                        {
+                                            destination.country
+                                        }
+
+                                    </div>
+
+                                    {/* CONTENT */}
+
+                                    <div className="absolute bottom-0 left-0 w-full p-7 text-white">
+
+                                        {/* PRICE */}
+
+                                        <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-lg font-black">
+
+                                            $
+                                            {
+                                                destination.price
+                                            }
+
+                                        </div>
+
+                                        {/* TITLE */}
+
+                                        <h3 className="text-3xl font-black mt-5 leading-tight">
+
+                                            {
+                                                destination.destinationName
+                                            }
+
+                                        </h3>
+
+                                        {/* DURATION */}
+
+                                        <div className="flex items-center gap-2 text-white/80 mt-4">
+
+                                            <FaCalendarAlt className="text-cyan-400" />
+
+                                            {
+                                                destination.duration
+                                            }
+
+                                        </div>
+                                    </div>
+
+                                    {/* NUMBER */}
+
+                                    <div className="absolute -bottom-10 -right-2 text-[160px] font-black text-white/4 leading-none">
+
+                                        0
+                                        {index + 1}
+
+                                    </div>
+                                </div>
+
+                                {/* BODY */}
+
+                                <div className="p-7">
+
+                                    {/* DESCRIPTION */}
+
+                                    <p className="text-base-content/70 leading-relaxed line-clamp-3">
+
+                                        {
+                                            destination.description
+                                        }
+
+                                    </p>
+
+                                    {/* BUTTON */}
+
+                                    <Link
+                                        href={`/destination/${destination._id}`}
+                                        className="group/button mt-7 h-14 rounded-2xl bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold flex items-center justify-center gap-3 transition-all duration-500 shadow-[0_15px_40px_rgba(6,182,212,0.25)] hover:scale-[1.02]"
+                                    >
+
+                                        View Details
+
+                                        <FaArrowRight className="group-hover/button:translate-x-1 transition-all duration-300" />
+
+                                    </Link>
+                                </div>
+                            </div>
+                        )
+                    )}
+                </div>
             </div>
-        </div>
+        </section>
     );
 };
 
