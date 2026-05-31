@@ -1,5 +1,6 @@
 import Banner from "@/components/Banner";
 import PopularDestinations from "@/components/PopularDestination";
+import TravelCategories from "@/components/TravelCategories";
 import WhyChooseUs from "@/components/WhyChooseUs";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
       <Banner />
       <PopularDestinations />
       <WhyChooseUs />
+      <TravelCategories/>
     </div>
   );
 }

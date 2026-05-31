@@ -45,7 +45,7 @@ const features = [
 const WhyChooseUs = () => {
 
     return (
-        <section className="relative py-16  overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white">
+        <section className="relative py-16  overflow-hidden bg-linear-to-b from-white via-slate-50 to-white">
 
             {/* BACKGROUND BLUR */}
 
@@ -100,11 +100,11 @@ const WhyChooseUs = () => {
 
                             {/* HOVER GRADIENT */}
 
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 transition-all duration-500"></div>
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-br from-cyan-500/5 to-blue-500/5 transition-all duration-500"></div>
 
                             {/* ICON */}
 
-                            <div className="relative w-20 h-20 rounded-[28px] bg-gradient-to-br from-cyan-500 to-blue-600 text-white text-4xl flex items-center justify-center shadow-[0_10px_30px_rgba(6,182,212,0.35)] group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                            <div className="relative w-20 h-20 rounded-[28px] bg-linear-to-br from-cyan-500 to-blue-600 text-white text-4xl flex items-center justify-center shadow-[0_10px_30px_rgba(6,182,212,0.35)] group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
 
                                 {feature.icon}
 
@@ -130,7 +130,7 @@ const WhyChooseUs = () => {
 
                             {/* BOTTOM LINE */}
 
-                            <div className="relative mt-8 w-12 group-hover:w-full h-1 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 transition-all duration-500"></div>
+                            <div className="relative mt-8 w-12 group-hover:w-full h-1 rounded-full bg-linear-to-r from-cyan-500 to-blue-600 transition-all duration-500"></div>
 
                             {/* BIG BACKGROUND NUMBER */}
 
