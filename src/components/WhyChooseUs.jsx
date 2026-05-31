@@ -143,54 +143,7 @@ const WhyChooseUs = () => {
                     ))}
                 </div>
 
-                {/* BOTTOM STATS */}
-
-                <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8">
-
-                    <div className="text-center">
-
-                        <h3 className="text-5xl font-black text-cyan-600">
-                            15K+
-                        </h3>
-
-                        <p className="text-gray-500 mt-3">
-                            Happy Travelers
-                        </p>
-                    </div>
-
-                    <div className="text-center">
-
-                        <h3 className="text-5xl font-black text-cyan-600">
-                            120+
-                        </h3>
-
-                        <p className="text-gray-500 mt-3">
-                            Destinations
-                        </p>
-                    </div>
-
-                    <div className="text-center">
-
-                        <h3 className="text-5xl font-black text-cyan-600">
-                            98%
-                        </h3>
-
-                        <p className="text-gray-500 mt-3">
-                            Satisfaction Rate
-                        </p>
-                    </div>
-
-                    <div className="text-center">
-
-                        <h3 className="text-5xl font-black text-cyan-600">
-                            24/7
-                        </h3>
-
-                        <p className="text-gray-500 mt-3">
-                            Support Service
-                        </p>
-                    </div>
-                </div>
+                
             </div>
         </section>
     );
