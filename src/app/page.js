@@ -1,5 +1,6 @@
 import Banner from "@/components/Banner";
 import Gallery from "@/components/Gallery";
+import NewsletterSection from "@/components/Newsletter";
 import PopularDestinations from "@/components/PopularDestination";
 import SpecialOffers from "@/components/SpecialOffers";
 import StatisticsSection from "@/components/Statistics";
@@ -18,6 +19,7 @@ export default function Home() {
       <TravelerReviews />
       <Gallery />
       <StatisticsSection />
+      <NewsletterSection />
     </div>
   );
 }
