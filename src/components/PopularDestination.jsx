@@ -23,7 +23,7 @@ const PopularDestinations = async () => {
         destinations.slice(0, 3);
 
     return (
-        <section className="py-24 bg-white">
+        <section className="py-16  bg-white">
 
             <div className="max-w-7xl mx-auto px-4">
 
@@ -38,8 +38,7 @@ const PopularDestinations = async () => {
                         </p>
 
                         <h2 className="text-4xl md:text-5xl font-black text-slate-900 mt-3 leading-tight">
-                            Explore Popular <br />
-                            Destinations
+                            Explore Popular Destinations
                         </h2>
                     </div>
 
