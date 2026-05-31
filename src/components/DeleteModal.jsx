@@ -8,6 +8,7 @@ import {
 } from "@heroui/react";
 
 import { FaTrash } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const DeleteModal = ({ id }) => {
 
@@ -34,7 +35,7 @@ const DeleteModal = ({ id }) => {
 
             if (data.deletedCount > 0) {
 
-                alert("Destination Deleted Successfully!");
+                toast.success("Destination Deleted Successfully!");
 
                 window.location.href = "/destination";
             }
@@ -43,7 +44,7 @@ const DeleteModal = ({ id }) => {
 
             console.error(error);
 
-            alert(error.message);
+            toast.error(error.message);
 
         } finally {
 

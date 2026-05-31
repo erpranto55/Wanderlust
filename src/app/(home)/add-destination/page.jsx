@@ -13,6 +13,7 @@ import {
     TextArea,
     TextField,
 } from "@heroui/react";
+import { toast } from "react-toastify";
 
 const categories = [
     "Beach",
@@ -54,14 +55,14 @@ const AddDestination = () => {
 
             console.log(data);
 
-            alert("Destination Added Successfully!");
+            toast.success("Destination Added Successfully!");
 
             e.target.reset();
             setImagePreview("");
 
         } catch (error) {
             console.error(error);
-            alert(error.message);
+            toast.error(error.message);
         } finally {
             setIsSubmitting(false);
         }
