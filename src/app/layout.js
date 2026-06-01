@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import GoogleLoginToast from "@/components/GoogleLoginToast ";
 
 const josefin = Josefin_Sans({
   variable: "--font-geist-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
           <Footer />
+          <GoogleLoginToast />
           <ToastContainer
             position="top-right"
             autoClose={2500}

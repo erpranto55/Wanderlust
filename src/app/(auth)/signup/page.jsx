@@ -25,10 +25,12 @@ import {
     FaLock,
     FaUser,
 } from "react-icons/fa";
+
 import { authClient } from "@/lib/auth-client";
+
 import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
-import { redirect } from "next/navigation";
 
 const SignUpPage = () => {
 
@@ -39,6 +41,12 @@ const SignUpPage = () => {
         useState(false);
 
     const [showConfirmPassword, setShowConfirmPassword] =
+        useState(false);
+
+    const [isLoading, setIsLoading] =
+        useState(false);
+
+    const [googleLoading, setGoogleLoading] =
         useState(false);
 
     useEffect(() => {
@@ -56,7 +64,7 @@ const SignUpPage = () => {
     }
 
     // ======================================================
-    // HANDLE SUBMIT
+    // HANDLE EMAIL SIGNUP
     // ======================================================
 
     const onSubmit = async (e) => {
@@ -65,12 +73,37 @@ const SignUpPage = () => {
 
         try {
 
-            const formData = new FormData(e.currentTarget);
+            setIsLoading(true);
 
-            const user = Object.fromEntries(formData.entries());
+            const formData =
+                new FormData(
+                    e.currentTarget
+                );
+
+            const user =
+                Object.fromEntries(
+                    formData.entries()
+                );
+
+            // PASSWORD CHECK
+
+            if (
+                user.password !==
+                user.confirmPassword
+            ) {
+
+                toast.error(
+                    "Passwords do not match!"
+                );
+
+                return;
+            }
+
+            // SIGNUP
 
             const { data, error } =
                 await authClient.signUp.email({
+
                     email: user.email,
                     password: user.password,
                     name: user.name,
@@ -80,10 +113,12 @@ const SignUpPage = () => {
             // ERROR
 
             if (error) {
+
                 toast.error(
                     error.message ||
                     "Signup Failed!"
                 );
+
                 return;
             }
 
@@ -91,11 +126,35 @@ const SignUpPage = () => {
 
             if (data) {
 
+                // SAVE USER IN BACKEND
+
+                await fetch(
+                    "http://localhost:5000/users",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "content-type":
+                                "application/json",
+                        },
+
+                        body: JSON.stringify({
+
+                            name: user.name,
+
+                            email: user.email,
+
+                            image: user.image,
+                        }),
+                    }
+                );
+
                 toast.success(
                     "Account Created Successfully!"
                 );
-                // REDIRECT
-                redirect('/');
+
+                window.location.href =
+                    "/";
             }
 
         } catch (err) {
@@ -105,8 +164,46 @@ const SignUpPage = () => {
             toast.error(
                 "Something went wrong!"
             );
+
+        } finally {
+
+            setIsLoading(false);
         }
     };
+
+    // ======================================================
+    // HANDLE GOOGLE SIGNUP
+    // ======================================================
+
+    const handleGoogleSignup =
+        async () => {
+
+            try {
+
+                setGoogleLoading(true);
+                toast.success(
+                    "Google Signup Successful!"
+                );
+                await authClient.signIn.social({
+
+                    provider: "google",
+
+                    callbackURL: "/",
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                toast.error(
+                    "Google Signup Failed!"
+                );
+
+            } finally {
+
+                setGoogleLoading(false);
+            }
+        };
 
     return (
         <section
@@ -114,7 +211,9 @@ const SignUpPage = () => {
             relative
             min-h-screen
             overflow-hidden
-            bg-base-100 transition-all duration-500
+            bg-base-100
+            transition-all
+            duration-500
             flex
             items-center
             justify-center
@@ -123,17 +222,13 @@ const SignUpPage = () => {
             "
         >
 
-            {/* ====================================================== */}
-            {/* BACKGROUND EFFECTS */}
-            {/* ====================================================== */}
+            {/* BACKGROUND */}
 
             <div className="absolute top-0 left-0 w-125 h-125 bg-cyan-500/10 rounded-full blur-3xl" />
 
             <div className="absolute bottom-0 right-0 w-125 h-125 bg-blue-500/10 rounded-full blur-3xl" />
 
-            {/* ====================================================== */}
             {/* MAIN CONTAINER */}
-            {/* ====================================================== */}
 
             <div
                 className="
@@ -146,15 +241,13 @@ const SignUpPage = () => {
                 bg-base-200/60
                 border-base-300
                 backdrop-blur-2xl
-                shadow-[0_25px_80px_rgba(0,0,0,0.45)]
+                shadow-[0_25px_80px_rgba(0,0,0,0.15)]
                 grid
                 lg:grid-cols-[1fr_1.1fr]
                 "
             >
 
-                {/* ====================================================== */}
                 {/* LEFT SIDE */}
-                {/* ====================================================== */}
 
                 <div
                     className="
@@ -174,23 +267,17 @@ const SignUpPage = () => {
                     "
                 >
 
-                    {/* ====================================================== */}
-                    {/* GLOW EFFECTS */}
-                    {/* ====================================================== */}
+                    {/* GLOW */}
 
                     <div className="absolute -top-20 -left-20 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl" />
 
                     <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl" />
 
-                    {/* ====================================================== */}
                     {/* CONTENT */}
-                    {/* ====================================================== */}
 
                     <div className="relative z-10">
 
-                        {/* ====================================================== */}
                         {/* LOGO */}
-                        {/* ====================================================== */}
 
                         <div
                             className="
@@ -219,7 +306,7 @@ const SignUpPage = () => {
                                 flex
                                 items-center
                                 justify-center
-                                text-base-content
+                                text-white
                                 text-lg
                                 shadow-[0_10px_30px_rgba(6,182,212,0.35)]
                                 "
@@ -247,13 +334,9 @@ const SignUpPage = () => {
 
                         </div>
 
-                        {/* ====================================================== */}
-                        {/* HERO TEXT */}
-                        {/* ====================================================== */}
+                        {/* HERO */}
 
                         <div className="mt-20">
-
-                            {/* MINI BADGE */}
 
                             <div
                                 className="
@@ -264,8 +347,9 @@ const SignUpPage = () => {
                                 py-2
                                 rounded-full
                                 bg-cyan-500/10
+                                border
                                 border-cyan-500/20
-                                text-cyan-400
+                                text-cyan-500
                                 text-sm
                                 font-semibold
                                 "
@@ -274,8 +358,6 @@ const SignUpPage = () => {
                                 ✈ Explore Premium Destinations
 
                             </div>
-
-                            {/* HEADING */}
 
                             <h1
                                 className="
@@ -290,7 +372,7 @@ const SignUpPage = () => {
 
                                 Travel Beyond
 
-                                <span className="block mt-3 text-cyan-400">
+                                <span className="block mt-3 text-cyan-500">
 
                                     Boundaries
 
@@ -298,14 +380,12 @@ const SignUpPage = () => {
 
                             </h1>
 
-                            {/* DESCRIPTION */}
-
                             <p
                                 className="
                                 mt-8
                                 text-lg
                                 leading-relaxed
-                                text-slate-500
+                                text-base-content/60
                                 max-w-xl
                                 "
                             >
@@ -319,37 +399,33 @@ const SignUpPage = () => {
 
                         </div>
 
-                        {/* ====================================================== */}
                         {/* FEATURES */}
-                        {/* ====================================================== */}
 
                         <div className="mt-12 grid grid-cols-2 gap-4">
 
-                            {/* FEATURE 1 */}
-
                             <div
                                 className="
-                rounded-3xl
-                border
-                border-base-300
-                bg-base-100/70
-                backdrop-blur-xl
-                p-5
-                "
+                                rounded-3xl
+                                border
+                                border-base-300
+                                bg-base-100/70
+                                backdrop-blur-xl
+                                p-5
+                                "
                             >
 
                                 <div
                                     className="
-                    w-12
-                    h-12
-                    rounded-2xl
-                    bg-cyan-500/10
-                    flex
-                    items-center
-                    justify-center
-                    text-cyan-400
-                    text-xl
-                    "
+                                    w-12
+                                    h-12
+                                    rounded-2xl
+                                    bg-cyan-500/10
+                                    flex
+                                    items-center
+                                    justify-center
+                                    text-cyan-500
+                                    text-xl
+                                    "
                                 >
 
                                     ✈
@@ -369,8 +445,6 @@ const SignUpPage = () => {
                                 </p>
 
                             </div>
-
-                            {/* FEATURE 2 */}
 
                             <div
                                 className="
@@ -392,7 +466,7 @@ const SignUpPage = () => {
                                     flex
                                     items-center
                                     justify-center
-                                    text-cyan-400
+                                    text-cyan-500
                                     text-xl
                                     "
                                 >
@@ -419,9 +493,7 @@ const SignUpPage = () => {
 
                     </div>
 
-                    {/* ====================================================== */}
-                    {/* BOTTOM USER CARD */}
-                    {/* ====================================================== */}
+                    {/* BOTTOM CARD */}
 
                     <div
                         className="
@@ -434,18 +506,14 @@ const SignUpPage = () => {
                         bg-base-100/70
                         backdrop-blur-xl
                         p-7
-                        shadow-[0_15px_50px_rgba(0,0,0,0.2)]
+                        shadow-[0_15px_50px_rgba(0,0,0,0.12)]
                         overflow-hidden
                         "
                     >
 
-                        {/* BG GLOW */}
-
                         <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl" />
 
                         <div className="relative flex items-center gap-5">
-
-                            {/* ICON */}
 
                             <div
                                 className="
@@ -458,7 +526,7 @@ const SignUpPage = () => {
                                 flex
                                 items-center
                                 justify-center
-                                text-base-content
+                                text-white
                                 text-2xl
                                 shadow-[0_10px_30px_rgba(6,182,212,0.35)]
                                 "
@@ -467,8 +535,6 @@ const SignUpPage = () => {
                                 <FaGlobeAsia />
 
                             </div>
-
-                            {/* TEXT */}
 
                             <div>
 
@@ -492,9 +558,7 @@ const SignUpPage = () => {
 
                 </div>
 
-                {/* ====================================================== */}
                 {/* RIGHT SIDE */}
-                {/* ====================================================== */}
 
                 <div
                     className="
@@ -510,9 +574,7 @@ const SignUpPage = () => {
 
                     <div className="w-full max-w-xl">
 
-                        {/* ====================================================== */}
                         {/* MOBILE LOGO */}
-                        {/* ====================================================== */}
 
                         <div className="lg:hidden flex justify-center mb-10">
 
@@ -544,7 +606,7 @@ const SignUpPage = () => {
                                     flex
                                     items-center
                                     justify-center
-                                    text-base-content
+                                    text-white
                                     "
                                 >
 
@@ -558,9 +620,7 @@ const SignUpPage = () => {
 
                         </div>
 
-                        {/* ====================================================== */}
                         {/* HEADING */}
-                        {/* ====================================================== */}
 
                         <div className="text-center">
 
@@ -593,18 +653,14 @@ const SignUpPage = () => {
 
                         </div>
 
-                        {/* ====================================================== */}
                         {/* FORM */}
-                        {/* ====================================================== */}
 
                         <Form
                             onSubmit={onSubmit}
                             className="mt-12 flex flex-col gap-7"
                         >
 
-                            {/* ====================================================== */}
                             {/* FULL NAME */}
-                            {/* ====================================================== */}
 
                             <TextField
                                 isRequired
@@ -626,7 +682,7 @@ const SignUpPage = () => {
                                         left-5
                                         top-1/2
                                         -translate-y-1/2
-                                        text-cyan-400
+                                        text-cyan-500
                                         z-10
                                         "
                                     />
@@ -642,9 +698,6 @@ const SignUpPage = () => {
                                         bg-base-100/70
                                         pl-12
                                         text-base-content
-                                        focus-within:border-cyan-400/50
-                                        transition-all
-                                        duration-300
                                         "
                                     />
 
@@ -654,9 +707,7 @@ const SignUpPage = () => {
 
                             </TextField>
 
-                            {/* ====================================================== */}
-                            {/* PROFILE IMAGE URL */}
-                            {/* ====================================================== */}
+                            {/* IMAGE URL */}
 
                             <TextField
                                 isRequired
@@ -679,7 +730,7 @@ const SignUpPage = () => {
                                         left-5
                                         top-1/2
                                         -translate-y-1/2
-                                        text-cyan-400
+                                        text-cyan-500
                                         z-10
                                         "
                                     />
@@ -695,22 +746,16 @@ const SignUpPage = () => {
                                         bg-base-100/70
                                         pl-12
                                         text-base-content
-                                        focus-within:border-cyan-400/50
-                                        transition-all
-                                        duration-300
                                         "
                                     />
 
                                 </div>
 
-
                                 <FieldError />
 
                             </TextField>
 
-                            {/* ====================================================== */}
                             {/* EMAIL */}
-                            {/* ====================================================== */}
 
                             <TextField
                                 isRequired
@@ -733,7 +778,7 @@ const SignUpPage = () => {
                                         left-5
                                         top-1/2
                                         -translate-y-1/2
-                                        text-cyan-400
+                                        text-cyan-500
                                         z-10
                                         "
                                     />
@@ -749,9 +794,6 @@ const SignUpPage = () => {
                                         bg-base-100/70
                                         pl-12
                                         text-base-content
-                                        focus-within:border-cyan-400/50
-                                        transition-all
-                                        duration-300
                                         "
                                     />
 
@@ -761,9 +803,7 @@ const SignUpPage = () => {
 
                             </TextField>
 
-                            {/* ====================================================== */}
                             {/* PASSWORD */}
-                            {/* ====================================================== */}
 
                             <TextField
                                 isRequired
@@ -790,13 +830,18 @@ const SignUpPage = () => {
                                         left-5
                                         top-1/2
                                         -translate-y-1/2
-                                        text-cyan-400
+                                        text-cyan-500
                                         z-10
                                         "
                                     />
 
                                     <Input
                                         placeholder="Enter your password"
+                                        type={
+                                            showPassword
+                                                ? "text"
+                                                : "password"
+                                        }
                                         className="
                                         w-full
                                         h-14
@@ -807,9 +852,6 @@ const SignUpPage = () => {
                                         pl-12
                                         pr-14
                                         text-base-content
-                                        focus-within:border-cyan-400/50
-                                        transition-all
-                                        duration-300
                                         "
                                     />
 
@@ -842,7 +884,7 @@ const SignUpPage = () => {
 
                                 <Description className="mt-3 text-sm text-base-content/60">
 
-                                    Minimum 8 characters with uppercase and number
+                                    Minimum 8 characters
 
                                 </Description>
 
@@ -850,9 +892,7 @@ const SignUpPage = () => {
 
                             </TextField>
 
-                            {/* ====================================================== */}
                             {/* CONFIRM PASSWORD */}
-                            {/* ====================================================== */}
 
                             <TextField
                                 isRequired
@@ -862,22 +902,6 @@ const SignUpPage = () => {
                                         ? "text"
                                         : "password"
                                 }
-                                validate={(value) => {
-
-                                    const password =
-                                        document.querySelector(
-                                            'input[name="password"]'
-                                        )?.value;
-
-                                    if (
-                                        value !== password
-                                    ) {
-
-                                        return "Passwords do not match";
-                                    }
-
-                                    return null;
-                                }}
                                 className="w-full"
                             >
 
@@ -895,13 +919,18 @@ const SignUpPage = () => {
                                         left-5
                                         top-1/2
                                         -translate-y-1/2
-                                        text-cyan-400
+                                        text-cyan-500
                                         z-10
                                         "
                                     />
 
                                     <Input
                                         placeholder="Confirm your password"
+                                        type={
+                                            showConfirmPassword
+                                                ? "text"
+                                                : "password"
+                                        }
                                         className="
                                         w-full
                                         h-14
@@ -912,9 +941,6 @@ const SignUpPage = () => {
                                         pl-12
                                         pr-14
                                         text-base-content
-                                        focus-within:border-cyan-400/50
-                                        transition-all
-                                        duration-300
                                         "
                                     />
 
@@ -945,22 +971,17 @@ const SignUpPage = () => {
 
                                 </div>
 
-                                <Description className="mt-3 text-sm text-base-content/60">
-
-                                    Minimum 8 characters with uppercase and number
-
-                                </Description>
-
                                 <FieldError />
 
                             </TextField>
 
-                            {/* ====================================================== */}
                             {/* SUBMIT BUTTON */}
-                            {/* ====================================================== */}
 
                             <Button
                                 type="submit"
+                                isDisabled={
+                                    isLoading
+                                }
                                 className="
                                 mt-2
                                 h-14
@@ -973,7 +994,7 @@ const SignUpPage = () => {
                                 hover:to-blue-500
                                 text-lg
                                 font-bold
-                                text-base-content
+                                text-white
                                 shadow-[0_15px_40px_rgba(6,182,212,0.35)]
                                 transition-all
                                 duration-300
@@ -981,17 +1002,81 @@ const SignUpPage = () => {
                                 "
                             >
 
-                                Create Account
+                                {isLoading
+                                    ? "Creating..."
+                                    : "Create Account"}
 
                                 <FaArrowRight />
 
                             </Button>
 
+                            {/* GOOGLE BUTTON */}
+
+                            <Button
+                                type="button"
+                                onPress={
+                                    handleGoogleSignup
+                                }
+                                isDisabled={
+                                    googleLoading
+                                }
+                                className="
+                                h-14
+                                w-full
+                                rounded-2xl
+                                border
+                                border-base-300
+                                bg-base-100/70
+                                text-base-content
+                                text-lg
+                                font-semibold
+                                transition-all
+                                duration-300
+                                hover:bg-base-200
+                                flex
+                                items-center
+                                justify-center
+                                gap-3
+                                "
+                            >
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 48 48"
+                                    className="w-7 h-7"
+                                >
+
+                                    <path
+                                        fill="#FFC107"
+                                        d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12S17.4 12 24 12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"
+                                    />
+
+                                    <path
+                                        fill="#FF3D00"
+                                        d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
+                                    />
+
+                                    <path
+                                        fill="#4CAF50"
+                                        d="M24 44c5.2 0 10-2 13.5-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.5 16.2 44 24 44z"
+                                    />
+
+                                    <path
+                                        fill="#1976D2"
+                                        d="M43.6 20.5H42V20H24v8h11.3c-1.1 3.1-3.3 5.5-6.2 7.1l6.2 5.2C39.5 36.5 44 30.8 44 24c0-1.3-.1-2.3-.4-3.5z"
+                                    />
+
+                                </svg>
+
+                                {googleLoading
+                                    ? "Redirecting..."
+                                    : "Continue With Google"}
+
+                            </Button>
+
                         </Form>
 
-                        {/* ====================================================== */}
                         {/* FOOTER */}
-                        {/* ====================================================== */}
 
                         <p
                             className="
@@ -1009,8 +1094,8 @@ const SignUpPage = () => {
                                 className="
                                 ml-2
                                 font-semibold
-                                text-cyan-400
-                                hover:text-cyan-300
+                                text-cyan-500
+                                hover:text-cyan-400
                                 transition-all
                                 "
                             >
