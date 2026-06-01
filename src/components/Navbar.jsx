@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, {
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 
 import {
     HiMenuAlt3,
@@ -11,18 +15,43 @@ import {
 import {
     FaMoon,
     FaSun,
+    FaUserCircle,
+    FaUser,
+    FaSignOutAlt,
 } from "react-icons/fa";
+
+import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 const Navbar = () => {
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] =
+        useState(false);
 
-    const [theme, setTheme] = useState("light");
+    const [theme, setTheme] =
+        useState("light");
+
+    const [user, setUser] =
+        useState(null);
+
+    const [dropdownOpen, setDropdownOpen] =
+        useState(false);
+
+    const [imageError, setImageError] =
+        useState(false);
+
+    const dropdownRef =
+        useRef(null);
+
+    // ====================================
+    // THEME
+    // ====================================
 
     useEffect(() => {
 
         const savedTheme =
-            localStorage.getItem("theme") || "light";
+            localStorage.getItem("theme") ||
+            "light";
 
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setTheme(savedTheme);
@@ -33,7 +62,6 @@ const Navbar = () => {
         );
 
     }, []);
-
 
     const toggleTheme = () => {
 
@@ -55,42 +83,138 @@ const Navbar = () => {
         );
     };
 
+    // ====================================
+    // SESSION
+    // ====================================
+
+    useEffect(() => {
+
+        const getSession =
+            async () => {
+
+                const session =
+                    await authClient.getSession();
+
+                if (
+                    session?.data?.user
+                ) {
+
+                    setUser(
+                        session.data.user
+                    );
+                }
+            };
+
+        getSession();
+
+    }, []);
+
+    // ====================================
+    // CLOSE DROPDOWN
+    // ====================================
+
+    useEffect(() => {
+
+        const handleClickOutside =
+            (event) => {
+
+                if (
+                    dropdownRef.current &&
+                    !dropdownRef.current.contains(
+                        event.target
+                    )
+                ) {
+
+                    setDropdownOpen(
+                        false
+                    );
+                }
+            };
+
+        document.addEventListener(
+            "mousedown",
+            handleClickOutside
+        );
+
+        return () => {
+
+            document.removeEventListener(
+                "mousedown",
+                handleClickOutside
+            );
+        };
+
+    }, []);
+
+    // ====================================
+    // LOGOUT
+    // ====================================
+
+    const handleLogout =
+        async () => {
+
+            await authClient.signOut();
+
+            window.location.href =
+                "/";
+        };
+
+    // ====================================
+    // NAV LINKS
+    // ====================================
+
     const navLinks = (
         <>
             <li>
+
                 <Link
                     href="/"
                     className="hover:text-cyan-500 transition-all duration-300"
                 >
+
                     Home
+
                 </Link>
+
             </li>
 
             <li>
+
                 <Link
                     href="/destination"
                     className="hover:text-cyan-500 transition-all duration-300"
                 >
+
                     Destination
+
                 </Link>
+
             </li>
 
             <li>
+
                 <Link
                     href="/my-bookings"
                     className="hover:text-cyan-500 transition-all duration-300"
                 >
+
                     My Bookings
+
                 </Link>
+
             </li>
 
             <li>
+
                 <Link
                     href="/add-destination"
                     className="hover:text-cyan-500 transition-all duration-300"
                 >
+
                     Add Destination
+
                 </Link>
+
             </li>
         </>
     );
@@ -104,19 +228,15 @@ const Navbar = () => {
 
                     {/* LOGO */}
 
-                    <div>
+                    <Link href="/">
 
-                        <Link href="/">
+                        <h1 className="text-3xl md:text-4xl font-extrabold bg-linear-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
 
-                            <h1 className="text-3xl md:text-4xl font-extrabold bg-linear-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
+                            WanderLust
 
-                                WanderLust
+                        </h1>
 
-                            </h1>
-
-                        </Link>
-
-                    </div>
+                    </Link>
 
                     {/* DESKTOP MENU */}
 
@@ -144,43 +264,151 @@ const Navbar = () => {
 
                         </button>
 
-                        {/* PROFILE */}
+                        {/* USER */}
 
-                        <Link
-                            href="/profile"
-                            className="hover:text-cyan-500 dark:text-gray-200 transition-all duration-300 font-medium"
-                        >
-                            Profile
-                        </Link>
+                        {user ? (
 
-                        {/* LOGIN */}
+                            <div
+                                className="relative"
+                                ref={
+                                    dropdownRef
+                                }
+                            >
 
-                        <Link
-                            href="/login"
-                            className="px-5 py-2 rounded-xl border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white transition-all duration-300 font-medium"
-                        >
-                            Login
-                        </Link>
+                                {/* PROFILE IMAGE */}
 
-                        {/* SIGNUP */}
+                                <button
+                                    onClick={() =>
+                                        setDropdownOpen(
+                                            !dropdownOpen
+                                        )
+                                    }
+                                    className="w-12 h-12 rounded-full overflow-hidden border-2 border-cyan-500 shadow-lg"
+                                >
 
-                        <Link
-                            href="/signup"
-                            className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white transition-all duration-300 font-medium shadow-md"
-                        >
-                            Signup
-                        </Link>
+                                    {user.image &&
+                                        !imageError ? (
+
+                                        <Image
+                                            src={
+                                                user.image
+                                            }
+                                            fill
+                                            alt="profile"
+                                            className="w-full h-full object-cover"
+                                            onError={() =>
+                                                setImageError(
+                                                    true
+                                                )
+                                            }
+                                        />
+
+                                    ) : (
+
+                                        <div className="w-full h-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-2xl text-cyan-500">
+
+                                            <FaUserCircle />
+
+                                        </div>
+                                    )}
+
+                                </button>
+
+                                {/* DROPDOWN */}
+
+                                {dropdownOpen && (
+
+                                    <div className="absolute right-0 mt-4 w-56 rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden">
+
+                                        {/* USER INFO */}
+
+                                        <div className="px-5 py-4 border-b border-slate-200 dark:border-slate-700">
+
+                                            <h3 className="font-bold text-slate-800 dark:text-white">
+
+                                                {user.name}
+
+                                            </h3>
+
+                                            <p className="text-sm text-slate-500 truncate">
+
+                                                {user.email}
+
+                                            </p>
+
+                                        </div>
+
+                                        {/* PROFILE */}
+
+                                        <Link
+                                            href="/profile"
+                                            className="flex items-center gap-3 px-5 py-4 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 text-slate-700 dark:text-slate-200"
+                                        >
+
+                                            <FaUser />
+
+                                            Profile
+
+                                        </Link>
+
+                                        {/* LOGOUT */}
+
+                                        <button
+                                            onClick={
+                                                handleLogout
+                                            }
+                                            className="w-full flex items-center gap-3 px-5 py-4 hover:bg-red-50 dark:hover:bg-red-950/40 text-red-500 transition-all duration-300"
+                                        >
+
+                                            <FaSignOutAlt />
+
+                                            Logout
+
+                                        </button>
+
+                                    </div>
+                                )}
+
+                            </div>
+
+                        ) : (
+
+                            <>
+                                {/* LOGIN */}
+
+                                <Link
+                                    href="/login"
+                                    className="px-5 py-2 rounded-xl border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white transition-all duration-300 font-medium"
+                                >
+
+                                    Login
+
+                                </Link>
+
+                                {/* SIGNUP */}
+
+                                <Link
+                                    href="/signup"
+                                    className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white transition-all duration-300 font-medium shadow-md"
+                                >
+
+                                    Signup
+
+                                </Link>
+                            </>
+                        )}
+
                     </div>
 
-                    {/* MOBILE RIGHT */}
+                    {/* MOBILE */}
 
                     <div className="flex lg:hidden items-center gap-3">
 
-                        {/* MOBILE THEME BUTTON */}
+                        {/* THEME */}
 
                         <button
                             onClick={toggleTheme}
-                            className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg text-slate-700 dark:text-yellow-400 transition-all duration-300"
+                            className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg text-slate-700 dark:text-yellow-400"
                         >
 
                             {theme === "light"
@@ -190,10 +418,14 @@ const Navbar = () => {
 
                         </button>
 
-                        {/* MENU BUTTON */}
+                        {/* MENU */}
 
                         <button
-                            onClick={() => setIsOpen(!isOpen)}
+                            onClick={() =>
+                                setIsOpen(
+                                    !isOpen
+                                )
+                            }
                             className="text-3xl text-gray-700 dark:text-gray-200"
                         >
 
@@ -203,6 +435,7 @@ const Navbar = () => {
                             }
 
                         </button>
+
                     </div>
                 </div>
 
@@ -218,34 +451,63 @@ const Navbar = () => {
 
                         </ul>
 
-                        {/* MOBILE BUTTONS */}
+                        {/* MOBILE USER */}
 
                         <div className="flex flex-col gap-4 mt-6">
 
-                            <Link
-                                href="/profile"
-                                className="text-center py-3 rounded-xl border border-slate-300 dark:border-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
-                            >
-                                Profile
-                            </Link>
+                            {user ? (
 
-                            <Link
-                                href="/login"
-                                className="text-center py-3 rounded-xl border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white transition-all duration-300"
-                            >
-                                Login
-                            </Link>
+                                <>
+                                    <Link
+                                        href="/profile"
+                                        className="text-center py-3 rounded-xl border border-slate-300 dark:border-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
+                                    >
 
-                            <Link
-                                href="/signup"
-                                className="text-center py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white transition-all duration-300"
-                            >
-                                Signup
-                            </Link>
+                                        Profile
+
+                                    </Link>
+
+                                    <button
+                                        onClick={
+                                            handleLogout
+                                        }
+                                        className="py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white transition-all duration-300"
+                                    >
+
+                                        Logout
+
+                                    </button>
+                                </>
+
+                            ) : (
+
+                                <>
+                                    <Link
+                                        href="/login"
+                                        className="text-center py-3 rounded-xl border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white transition-all duration-300"
+                                    >
+
+                                        Login
+
+                                    </Link>
+
+                                    <Link
+                                        href="/signup"
+                                        className="text-center py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white transition-all duration-300"
+                                    >
+
+                                        Signup
+
+                                    </Link>
+                                </>
+                            )}
+
                         </div>
                     </div>
                 )}
+
             </div>
+
         </nav>
     );
 };
