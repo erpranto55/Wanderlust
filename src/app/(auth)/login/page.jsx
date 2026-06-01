@@ -18,7 +18,6 @@ import {
     FaEyeSlash,
     FaGlobeAsia,
     FaLock,
-    FaGithub,
 } from "react-icons/fa";
 
 import { toast } from "react-toastify";
@@ -33,8 +32,11 @@ const LogInPage = () => {
     const [isLoading, setIsLoading] =
         useState(false);
 
+    const [googleLoading, setGoogleLoading] =
+        useState(false);
+
     // =========================================
-    // HANDLE LOGIN
+    // HANDLE EMAIL LOGIN
     // =========================================
 
     const onSubmit = async (e) => {
@@ -101,6 +103,38 @@ const LogInPage = () => {
             setIsLoading(false);
         }
     };
+
+    // =========================================
+    // HANDLE GOOGLE LOGIN
+    // =========================================
+
+    const handleGoogleLogin =
+        async () => {
+
+            try {
+
+                setGoogleLoading(true);
+
+                await authClient.signIn.social({
+
+                    provider: "google",
+
+                    callbackURL: "/",
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                toast.error(
+                    "Google Login Failed!"
+                );
+
+            } finally {
+
+                setGoogleLoading(false);
+            }
+        };
 
     return (
         <section className="relative overflow-hidden min-h-[90vh] bg-base-100 transition-all duration-500">
@@ -361,31 +395,30 @@ const LogInPage = () => {
 
                             <Button
                                 type="button"
+                                onPress={
+                                    handleGoogleLogin
+                                }
+                                isDisabled={
+                                    googleLoading
+                                }
                                 className="
-                                    w-full
-                                    h-16
-                                    rounded-2xl
-                                    border
-                                    border-base-300
-                                    bg-base-100/70
-                                    text-base-content
-                                    text-lg
-                                    font-semibold
-                                    hover:bg-base-200
-                                    transition-all
-                                    duration-300
-                                    flex
-                                    items-center
-                                    justify-center
-                                    gap-3
-                                    "
-                                onPress={async () => {
-
-                                    await authClient.signIn.social({
-                                        provider: "google",
-                                        callbackURL: "/",
-                                    });
-                                }}
+                                w-full
+                                h-16
+                                rounded-2xl
+                                border
+                                border-base-300
+                                bg-base-100/70
+                                text-base-content
+                                text-lg
+                                font-semibold
+                                hover:bg-base-200
+                                transition-all
+                                duration-300
+                                flex
+                                items-center
+                                justify-center
+                                gap-3
+                                "
                             >
 
                                 <svg
@@ -416,7 +449,9 @@ const LogInPage = () => {
 
                                 </svg>
 
-                                Continue With Google
+                                {googleLoading
+                                    ? "Redirecting..."
+                                    : "Continue With Google"}
 
                             </Button>
 
