@@ -7,45 +7,50 @@ import {
 
 import { toast } from "react-toastify";
 
-import { authClient } from "@/lib/auth-client";
+import { useAuthSession } from "@/lib/auth-client";
 
 const GoogleLoginToast = () => {
 
     const hasShownToast =
         useRef(false);
 
+    const {
+        data: session,
+    } = useAuthSession();
+
     useEffect(() => {
 
-        const checkUser = async () => {
+        const alreadyShown =
+            sessionStorage.getItem(
+                "welcome-toast"
+            );
 
-            const alreadyShown =
-                sessionStorage.getItem(
-                    "welcome-toast"
-                );
+        if (!session?.user) {
 
-            if (alreadyShown) return;
+            hasShownToast.current =
+                false;
 
-            const session =
-                await authClient.getSession();
+            return;
+        }
 
-            if (
-                session?.data?.user
-            ) {
+        if (
+            alreadyShown ||
+            hasShownToast.current
+        ) return;
 
-                toast.success(
-                    `Welcome ${session.data.user.name}!`
-                );
+        toast.success(
+            `Welcome ${session.user.name}!`
+        );
 
-                sessionStorage.setItem(
-                    "welcome-toast",
-                    "true"
-                );
-            }
-        };
+        sessionStorage.setItem(
+            "welcome-toast",
+            "true"
+        );
 
-        checkUser();
+        hasShownToast.current =
+            true;
 
-    }, []);
+    }, [session?.user]);
 
     return null;
 };

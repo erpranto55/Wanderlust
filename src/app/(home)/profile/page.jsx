@@ -1,11 +1,12 @@
 "use client";
 
 import React, {
-    useEffect,
     useState,
 } from "react";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
     FaCamera,
@@ -18,19 +19,19 @@ import {
 
 import { MdPayments } from "react-icons/md";
 
-import { Modal } from "@heroui/react";
-
 import { toast } from "react-toastify";
 
-import { authClient } from "@/lib/auth-client";
+import {
+    authClient,
+    useAuthSession,
+} from "@/lib/auth-client";
 
 const ProfilePage = () => {
 
-    const [user, setUser] =
-        useState(null);
+    const router = useRouter();
 
-    const [imageError, setImageError] =
-        useState(false);
+    const [failedImage, setFailedImage] =
+        useState("");
 
     const [loading, setLoading] =
         useState(false);
@@ -45,45 +46,42 @@ const ProfilePage = () => {
             location: "",
         });
 
-    // =========================================
-    // GET USER SESSION
-    // =========================================
+    const {
+        data: session,
+        isPending,
+        refetch,
+    } = useAuthSession();
 
-    useEffect(() => {
+    const user =
+        session?.user || null;
 
-        const getUser =
-            async () => {
+    const userImage =
+        user?.image?.trim() || "";
 
-                const session =
-                    await authClient.getSession();
+    const canShowUserImage =
+        userImage &&
+        failedImage !== userImage;
 
-                if (
-                    session?.data?.user
-                ) {
+    const openEditModal = () => {
 
-                    setUser(
-                        session.data.user
-                    );
+        setFormData({
+            name:
+                user?.name ||
+                "",
 
-                    setFormData({
-                        name:
-                            session.data.user.name ||
-                            "",
+            image:
+                user?.image ||
+                "",
 
-                        image:
-                            session.data.user.image ||
-                            "",
+            location:
+                user?.location ||
+                "Bangladesh",
+        });
 
-                        location:
-                            session.data.user.location ||
-                            "Bangladesh",
-                    });
-                }
-            };
+        setFailedImage("");
 
-        getUser();
-
-    }, []);
+        setIsOpen(true);
+    };
 
     // =========================================
     // HANDLE INPUT CHANGE
@@ -111,51 +109,32 @@ const ProfilePage = () => {
 
                 setLoading(true);
 
-                const res =
-                    await fetch(
-                        "/api/update-user",
-                        {
-                            method: "PATCH",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-                            },
-
-                            body: JSON.stringify(
-                                {
-                                    id:
-                                        user.id,
-                                    ...formData,
-                                }
-                            ),
-                        }
+                const { data, error } =
+                    await authClient.updateUser(
+                        formData
                     );
 
-                const data =
-                    await res.json();
-
-                if (data.success) {
-
-                    toast.success(
-                        "Profile Updated Successfully!"
-                    );
-
-                    setUser({
-                        ...user,
-                        ...formData,
-                    });
-
-                    setIsOpen(
-                        false
-                    );
-
-                } else {
+                if (error) {
 
                     toast.error(
-                        data.message
+                        error.message ||
+                        "Profile update failed!"
                     );
+
+                    return;
                 }
+
+                toast.success(
+                    "Profile Updated Successfully!"
+                );
+
+                refetch();
+
+                setIsOpen(
+                    false
+                );
+
+                router?.refresh?.();
 
             } catch (error) {
 
@@ -168,6 +147,55 @@ const ProfilePage = () => {
                 setLoading(false);
             }
         };
+
+    if (isPending) {
+
+        return (
+            <section className="min-h-screen bg-base-100 px-4 py-20">
+
+                <div className="max-w-7xl mx-auto text-center text-base-content/60">
+
+                    Loading profile...
+
+                </div>
+
+            </section>
+        );
+    }
+
+    if (!user) {
+
+        return (
+            <section className="min-h-screen bg-base-100 px-4 py-20">
+
+                <div className="max-w-xl mx-auto text-center">
+
+                    <h1 className="text-4xl font-black text-base-content">
+
+                        Please log in
+
+                    </h1>
+
+                    <p className="mt-4 text-base-content/60">
+
+                        You need an account session to view your profile.
+
+                    </p>
+
+                    <Link
+                        href="/login"
+                        className="mt-8 inline-flex h-12 px-8 items-center justify-center rounded-2xl bg-cyan-500 text-white font-bold"
+                    >
+
+                        Login
+
+                    </Link>
+
+                </div>
+
+            </section>
+        );
+    }
 
     return (
         <section
@@ -287,21 +315,22 @@ const ProfilePage = () => {
                                     "
                                 >
 
-                                    {user?.image &&
-                                        !imageError ? (
+                                    {canShowUserImage ? (
 
                                         <Image
-                                            src={user.image}
+                                            src={userImage}
                                             alt="profile"
                                             width={160}
                                             height={160}
                                             unoptimized
                                             className="w-full h-full object-cover"
                                             onLoad={() =>
-                                                setImageError(false)
+                                                setFailedImage("")
                                             }
                                             onError={() =>
-                                                setImageError(true)
+                                                setFailedImage(
+                                                    userImage
+                                                )
                                             }
                                         />
 
@@ -335,11 +364,7 @@ const ProfilePage = () => {
                                 {/* CAMERA BTN */}
 
                                 <button
-                                    onClick={() =>
-                                        setIsOpen(
-                                            true
-                                        )
-                                    }
+                                    onClick={openEditModal}
                                     className="
                                     absolute
                                     bottom-2
@@ -417,7 +442,8 @@ const ProfilePage = () => {
 
                                 <FaMapMarkerAlt className="text-cyan-500" />
 
-                                {formData.location}
+                                {user.location ||
+                                    "Bangladesh"}
 
                             </div>
 
@@ -498,11 +524,7 @@ const ProfilePage = () => {
                         {/* EDIT BUTTON */}
 
                         <button
-                            onClick={() =>
-                                setIsOpen(
-                                    true
-                                )
-                            }
+                            onClick={openEditModal}
                             className="
                             mt-8
                             w-full

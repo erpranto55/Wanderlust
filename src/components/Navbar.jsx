@@ -26,7 +26,10 @@ import {
 
 import { toast } from "react-toastify";
 
-import { authClient } from "@/lib/auth-client";
+import {
+    authClient,
+    useAuthSession,
+} from "@/lib/auth-client";
 
 const Navbar = () => {
 
@@ -39,14 +42,19 @@ const Navbar = () => {
     const [theme, setTheme] =
         useState("light");
 
-    const [user, setUser] =
-        useState(null);
-
     const [dropdownOpen, setDropdownOpen] =
         useState(false);
 
-    const [imageError, setImageError] =
-        useState(false);
+    const [failedImage, setFailedImage] =
+        useState("");
+
+    const {
+        data: session,
+        refetch,
+    } = useAuthSession();
+
+    const user =
+        session?.user || null;
 
     const dropdownRef =
         useRef(null);
@@ -92,66 +100,12 @@ const Navbar = () => {
         );
     };
 
-    // ====================================
-    // SESSION
-    // ====================================
+    const userImage =
+        user?.image?.trim() || "";
 
-    useEffect(() => {
-
-        const getSession =
-            async () => {
-
-                try {
-
-                    const session =
-                        await authClient.getSession();
-
-                    console.log(
-                        "SESSION:",
-                        session
-                    );
-
-                    if (
-                        session?.data?.user
-                    ) {
-
-                        const currentUser = {
-
-                            ...session.data.user,
-
-                            image:
-                                session.data.user
-                                    .image ||
-                                session.user
-                                    ?.image ||
-                                "",
-                        };
-
-                        console.log(
-                            "USER:",
-                            currentUser
-                        );
-
-                        setUser(
-                            currentUser
-                        );
-
-                        setImageError(
-                            false
-                        );
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        error
-                    );
-                }
-            };
-
-        getSession();
-
-    }, []);
+    const canShowUserImage =
+        userImage &&
+        failedImage !== userImage;
 
     // ====================================
     // CLOSE DROPDOWN
@@ -209,7 +163,7 @@ const Navbar = () => {
                     "Logged out successfully!"
                 );
 
-                setUser(null);
+                refetch();
 
                 router.push("/login");
 
@@ -353,31 +307,25 @@ const Navbar = () => {
                                     className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-cyan-500 shadow-lg"
                                 >
 
-                                    {user?.image?.trim() &&
-                                        !imageError ? (
+                                    {canShowUserImage ? (
 
                                         <Image
                                             src={
-                                                user.image
+                                                userImage
                                             }
                                             fill
                                             alt="profile"
                                             unoptimized
                                             className="object-cover"
                                             onLoad={() =>
-                                                setImageError(
-                                                    false
+                                                setFailedImage(
+                                                    ""
                                                 )
                                             }
                                             onError={() => {
 
-                                                console.log(
-                                                    "IMAGE FAILED:",
-                                                    user.image
-                                                );
-
-                                                setImageError(
-                                                    true
+                                                setFailedImage(
+                                                    userImage
                                                 );
                                             }}
                                         />

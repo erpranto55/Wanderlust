@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
     Button,
@@ -25,6 +26,8 @@ import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
 
 const LogInPage = () => {
+
+    const router = useRouter();
 
     const [showPassword, setShowPassword] =
         useState(false);
@@ -86,8 +89,13 @@ const LogInPage = () => {
                     "Login Successful!"
                 );
 
-                window.location.href =
-                    "/";
+                authClient.$store.notify(
+                    "$sessionSignal"
+                );
+
+                router.refresh();
+
+                router.push("/");
             }
 
         } catch (err) {

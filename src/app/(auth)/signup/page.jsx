@@ -179,6 +179,12 @@ const SignUpPage = () => {
                     "Account Created Successfully!"
                 );
 
+                authClient.$store.notify(
+                    "$sessionSignal"
+                );
+
+                router.refresh();
+
                 router.push("/");
             }
 
