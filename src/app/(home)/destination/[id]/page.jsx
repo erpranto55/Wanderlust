@@ -22,20 +22,20 @@ const DestinationDetails = async ({ params }) => {
     const res = await fetch(
         `http://localhost:5000/destination/${id}`,
         {
+            headers: {
+                authorization: 'logged in'
+            },
             cache: "no-store",
         }
     );
 
-    const destination =
-        await res.json();
+    const destination = await res.json();
 
     // REVIEWS
 
-    const reviews =
-        destination?.reviews || [];
+    const reviews = destination?.reviews || [];
 
-    const totalReviews =
-        reviews.length;
+    const totalReviews = reviews.length;
 
     const averageRating =
         totalReviews > 0
@@ -202,7 +202,7 @@ const DestinationDetails = async ({ params }) => {
 
                                     {
                                         destination.travelers ||
-                                        "2 - 10 Travelers"
+                                        "1 - 10 Travelers"
                                     }
 
                                 </div>
@@ -372,7 +372,6 @@ const DestinationDetails = async ({ params }) => {
                         </div>
                     </div>
 
-                    {/* RIGHT */}
 
                     {/* RIGHT */}
 
