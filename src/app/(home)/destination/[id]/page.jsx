@@ -1,3 +1,4 @@
+import BookingCard from "@/components/BookingCard";
 import DeleteModal from "@/components/DeleteModal";
 import { EditModal } from "@/components/EditModal";
 import Image from "next/image";
@@ -373,133 +374,18 @@ const DestinationDetails = async ({ params }) => {
 
                     {/* RIGHT */}
 
+                    {/* RIGHT */}
+
                     <div className="relative">
 
-                        {/* STICKY CARD */}
+                        <div className="sticky top-28">
 
-                        <div className="sticky top-28 overflow-hidden rounded-[36px] border border-base-300 bg-base-200/60 backdrop-blur-xl p-8 shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
+                            <BookingCard
+                                destination={destination}
+                            />
 
-                            {/* GLOW */}
-
-                            <div className="absolute top-0 right-0 w-55 h-55 bg-cyan-500/10 rounded-full blur-3xl"></div>
-
-                            {/* CONTENT */}
-
-                            <div className="relative">
-
-                                {/* PRICE */}
-
-                                <div className="border-b border-base-300 pb-7">
-
-                                    <p className="text-base-content/60">
-
-                                        Starting From
-
-                                    </p>
-
-                                    <h2 className="text-5xl font-black text-cyan-500 mt-3">
-
-                                        $
-                                        {
-                                            destination.price
-                                        }
-
-                                    </h2>
-
-                                    <p className="text-base-content/60 mt-2">
-
-                                        per person
-
-                                    </p>
-                                </div>
-
-                                {/* DATE */}
-
-                                <div className="mt-7">
-
-                                    <label className="text-base-content font-bold block mb-3">
-
-                                        Departure Date
-
-                                    </label>
-
-                                    <div className="h-14 rounded-2xl border border-base-300 bg-base-100 flex items-center px-5 text-base-content/70">
-
-                                        {
-                                            destination.departureDate
-                                        }
-
-                                    </div>
-                                </div>
-
-                                {/* TRAVELERS */}
-
-                                <div className="mt-6">
-
-                                    <label className="text-base-content font-bold block mb-3">
-
-                                        Travelers
-
-                                    </label>
-
-                                    <div className="h-14 rounded-2xl border border-base-300 bg-base-100 flex items-center px-5 text-base-content/70">
-
-                                        {
-                                            destination.travelers ||
-                                            "2 - 10 Travelers"
-                                        }
-
-                                    </div>
-                                </div>
-
-                                {/* BUTTON */}
-
-                                <button className="w-full h-15 rounded-2xl bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-black text-lg shadow-[0_10px_40px_rgba(6,182,212,0.35)] transition-all duration-500 hover:scale-[1.02] mt-8">
-
-                                    Book Now →
-
-                                </button>
-
-                                {/* FEATURES */}
-
-                                <div className="space-y-5 mt-8">
-
-                                    {[
-                                        "Free cancellation up to 7 days",
-                                        "Travel insurance included",
-                                        "24/7 customer support",
-                                    ].map(
-                                        (
-                                            item,
-                                            index
-                                        ) => (
-
-                                            <div
-                                                key={
-                                                    index
-                                                }
-                                                className="flex items-center gap-4 text-base-content/70"
-                                            >
-
-                                                <div className="w-10 h-10 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center">
-
-                                                    <FaCheck />
-
-                                                </div>
-
-                                                <p>
-
-                                                    {
-                                                        item
-                                                    }
-
-                                                </p>
-                                            </div>
-                                        )
-                                    )}
-                                </div>
-                            </div>
                         </div>
+
                     </div>
                 </div>
 
