@@ -16,34 +16,32 @@ const GoogleLoginToast = () => {
 
     useEffect(() => {
 
-        const checkUser =
-            async () => {
+        const checkUser = async () => {
 
-                try {
+            const alreadyShown =
+                sessionStorage.getItem(
+                    "welcome-toast"
+                );
 
-                    const session =
-                        await authClient.getSession();
+            if (alreadyShown) return;
 
-                    // USER EXISTS
+            const session =
+                await authClient.getSession();
 
-                    if (
-                        session?.data?.user &&
-                        !hasShownToast.current
-                    ) {
+            if (
+                session?.data?.user
+            ) {
 
-                        hasShownToast.current =
-                            true;
+                toast.success(
+                    `Welcome ${session.data.user.name}!`
+                );
 
-                        toast.success(
-                            `Welcome ${session.data.user.name}!`
-                        );
-                    }
-
-                } catch (error) {
-
-                    console.error(error);
-                }
-            };
+                sessionStorage.setItem(
+                    "welcome-toast",
+                    "true"
+                );
+            }
+        };
 
         checkUser();
 

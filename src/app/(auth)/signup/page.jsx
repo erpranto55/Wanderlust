@@ -6,6 +6,8 @@ import React, {
     useState,
 } from "react";
 
+import { useRouter } from "next/navigation";
+
 import {
     Button,
     Description,
@@ -34,6 +36,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const SignUpPage = () => {
 
+    const router = useRouter();
+
     const [mounted, setMounted] =
         useState(false);
 
@@ -56,6 +60,42 @@ const SignUpPage = () => {
 
     }, []);
 
+    useEffect(() => {
+
+        const checkUser =
+            async () => {
+
+                const alreadyShown =
+                    typeof window !== "undefined"
+                        ? sessionStorage.getItem(
+                            "welcome-toast"
+                        )
+                        : null;
+
+                if (alreadyShown) return;
+
+                const session =
+                    await authClient.getSession();
+
+                if (
+                    session?.data?.user
+                ) {
+
+                    toast.success(
+                        `Welcome ${session.data.user.name}!`
+                    );
+
+                    sessionStorage.setItem(
+                        "welcome-toast",
+                        "true"
+                    );
+                }
+            };
+
+        checkUser();
+
+    }, []);
+
     if (!mounted) {
 
         return (
@@ -71,35 +111,44 @@ const SignUpPage = () => {
 
         e.preventDefault();
 
+        const formData =
+            new FormData(
+                e.currentTarget
+            );
+
+        const user =
+            Object.fromEntries(
+                formData.entries()
+            );
+
+        // PASSWORD MATCH CHECK
+
+        if (
+            user.password !==
+            user.confirmPassword
+        ) {
+
+            toast.error(
+                "Passwords do not match!"
+            );
+
+            return;
+        }
+
+        // PASSWORD LENGTH CHECK
+
+        if (user.password.length < 8) {
+
+            toast.error(
+                "Password must be at least 8 characters!"
+            );
+
+            return;
+        }
+
         try {
 
             setIsLoading(true);
-
-            const formData =
-                new FormData(
-                    e.currentTarget
-                );
-
-            const user =
-                Object.fromEntries(
-                    formData.entries()
-                );
-
-            // PASSWORD CHECK
-
-            if (
-                user.password !==
-                user.confirmPassword
-            ) {
-
-                toast.error(
-                    "Passwords do not match!"
-                );
-
-                return;
-            }
-
-            // SIGNUP
 
             const { data, error } =
                 await authClient.signUp.email({
@@ -126,35 +175,11 @@ const SignUpPage = () => {
 
             if (data) {
 
-                // SAVE USER IN BACKEND
-
-                await fetch(
-                    "http://localhost:5000/users",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "content-type":
-                                "application/json",
-                        },
-
-                        body: JSON.stringify({
-
-                            name: user.name,
-
-                            email: user.email,
-
-                            image: user.image,
-                        }),
-                    }
-                );
-
                 toast.success(
                     "Account Created Successfully!"
                 );
 
-                window.location.href =
-                    "/";
+                router.push("/");
             }
 
         } catch (err) {
@@ -181,9 +206,7 @@ const SignUpPage = () => {
             try {
 
                 setGoogleLoading(true);
-                toast.success(
-                    "Google Signup Successful!"
-                );
+
                 await authClient.signIn.social({
 
                     provider: "google",
@@ -267,13 +290,9 @@ const SignUpPage = () => {
                     "
                 >
 
-                    {/* GLOW */}
-
                     <div className="absolute -top-20 -left-20 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl" />
 
                     <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl" />
-
-                    {/* CONTENT */}
 
                     <div className="relative z-10">
 

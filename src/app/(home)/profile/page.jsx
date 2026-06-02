@@ -18,6 +18,10 @@ import {
 
 import { MdPayments } from "react-icons/md";
 
+import { Modal } from "@heroui/react";
+
+import { toast } from "react-toastify";
+
 import { authClient } from "@/lib/auth-client";
 
 const ProfilePage = () => {
@@ -27,6 +31,19 @@ const ProfilePage = () => {
 
     const [imageError, setImageError] =
         useState(false);
+
+    const [loading, setLoading] =
+        useState(false);
+
+    const [isOpen, setIsOpen] =
+        useState(false);
+
+    const [formData, setFormData] =
+        useState({
+            name: "",
+            image: "",
+            location: "",
+        });
 
     // =========================================
     // GET USER SESSION
@@ -47,12 +64,110 @@ const ProfilePage = () => {
                     setUser(
                         session.data.user
                     );
+
+                    setFormData({
+                        name:
+                            session.data.user.name ||
+                            "",
+
+                        image:
+                            session.data.user.image ||
+                            "",
+
+                        location:
+                            session.data.user.location ||
+                            "Bangladesh",
+                    });
                 }
             };
 
         getUser();
 
     }, []);
+
+    // =========================================
+    // HANDLE INPUT CHANGE
+    // =========================================
+
+    const handleChange = (e) => {
+
+        setFormData({
+            ...formData,
+            [e.target.name]:
+                e.target.value,
+        });
+    };
+
+    // =========================================
+    // HANDLE UPDATE
+    // =========================================
+
+    const handleUpdate =
+        async (e) => {
+
+            e.preventDefault();
+
+            try {
+
+                setLoading(true);
+
+                const res =
+                    await fetch(
+                        "/api/update-user",
+                        {
+                            method: "PATCH",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+                            },
+
+                            body: JSON.stringify(
+                                {
+                                    id:
+                                        user.id,
+                                    ...formData,
+                                }
+                            ),
+                        }
+                    );
+
+                const data =
+                    await res.json();
+
+                if (data.success) {
+
+                    toast.success(
+                        "Profile Updated Successfully!"
+                    );
+
+                    setUser({
+                        ...user,
+                        ...formData,
+                    });
+
+                    setIsOpen(
+                        false
+                    );
+
+                } else {
+
+                    toast.error(
+                        data.message
+                    );
+                }
+
+            } catch (error) {
+
+                toast.error(
+                    error.message
+                );
+
+            } finally {
+
+                setLoading(false);
+            }
+        };
 
     return (
         <section
@@ -102,7 +217,6 @@ const ProfilePage = () => {
                         md:text-6xl
                         font-black
                         text-base-content
-                        tracking-tight
                         "
                     >
 
@@ -115,18 +229,16 @@ const ProfilePage = () => {
                         mt-4
                         text-lg
                         text-base-content/60
-                        max-w-2xl
                         "
                     >
 
-                        Manage your account settings, travel preferences,
-                        and explore your journey statistics.
+                        Manage your account settings and travel preferences.
 
                     </p>
 
                 </div>
 
-                {/* MAIN GRID */}
+                {/* GRID */}
 
                 <div
                     className="
@@ -137,11 +249,10 @@ const ProfilePage = () => {
                     "
                 >
 
-                    {/* PROFILE CARD */}
+                    {/* LEFT CARD */}
 
                     <div
                         className="
-                        lg:col-span-1
                         rounded-[36px]
                         border
                         border-base-300
@@ -158,13 +269,11 @@ const ProfilePage = () => {
 
                         <div className="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl" />
 
-                        {/* PROFILE IMAGE */}
-
                         <div className="flex flex-col items-center relative z-10">
 
-                            <div className="relative">
+                            {/* PROFILE IMAGE */}
 
-                                {/* IMAGE */}
+                            <div className="relative">
 
                                 <div
                                     className="
@@ -182,17 +291,17 @@ const ProfilePage = () => {
                                         !imageError ? (
 
                                         <Image
-                                            src={
-                                                user.image
-                                            }
+                                            src={user.image}
                                             alt="profile"
                                             width={160}
                                             height={160}
+                                            unoptimized
                                             className="w-full h-full object-cover"
+                                            onLoad={() =>
+                                                setImageError(false)
+                                            }
                                             onError={() =>
-                                                setImageError(
-                                                    true
-                                                )
+                                                setImageError(true)
                                             }
                                         />
 
@@ -223,9 +332,14 @@ const ProfilePage = () => {
 
                                 </div>
 
-                                {/* CAMERA */}
+                                {/* CAMERA BTN */}
 
                                 <button
+                                    onClick={() =>
+                                        setIsOpen(
+                                            true
+                                        )
+                                    }
                                     className="
                                     absolute
                                     bottom-2
@@ -260,7 +374,6 @@ const ProfilePage = () => {
                                 text-3xl
                                 font-black
                                 text-base-content
-                                text-center
                                 "
                             >
 
@@ -275,8 +388,8 @@ const ProfilePage = () => {
                                 className="
                                 mt-2
                                 text-base-content/60
-                                text-center
                                 break-all
+                                text-center
                                 "
                             >
 
@@ -304,7 +417,7 @@ const ProfilePage = () => {
 
                                 <FaMapMarkerAlt className="text-cyan-500" />
 
-                                Bangladesh
+                                {formData.location}
 
                             </div>
 
@@ -319,8 +432,6 @@ const ProfilePage = () => {
                             border-base-300
                             pt-8
                             space-y-5
-                            relative
-                            z-10
                             "
                         >
 
@@ -332,7 +443,7 @@ const ProfilePage = () => {
 
                                 </span>
 
-                                <span className="font-bold text-base-content">
+                                <span className="font-bold">
 
                                     June 2026
 
@@ -348,7 +459,7 @@ const ProfilePage = () => {
 
                                 </span>
 
-                                <span className="font-bold text-base-content">
+                                <span className="font-bold">
 
                                     Bangladesh
 
@@ -360,7 +471,7 @@ const ProfilePage = () => {
 
                                 <span className="text-base-content/60">
 
-                                    Account Status
+                                    Status
 
                                 </span>
 
@@ -371,8 +482,8 @@ const ProfilePage = () => {
                                     rounded-full
                                     bg-green-500/10
                                     text-green-500
-                                    font-semibold
                                     text-sm
+                                    font-semibold
                                     "
                                 >
 
@@ -384,9 +495,14 @@ const ProfilePage = () => {
 
                         </div>
 
-                        {/* BUTTON */}
+                        {/* EDIT BUTTON */}
 
                         <button
+                            onClick={() =>
+                                setIsOpen(
+                                    true
+                                )
+                            }
                             className="
                             mt-8
                             w-full
@@ -412,482 +528,157 @@ const ProfilePage = () => {
 
                     </div>
 
-                    {/* RIGHT SECTION */}
+                    {/* RIGHT SIDE */}
 
                     <div className="lg:col-span-2">
 
-                        {/* STATISTICS */}
+                        <h2
+                            className="
+                            text-3xl
+                            font-black
+                            text-base-content
+                            mb-7
+                            "
+                        >
 
-                        <div>
+                            Travel Statistics
 
-                            <h2
-                                className="
-                                text-3xl
-                                font-black
-                                text-base-content
-                                mb-7
-                                "
-                            >
+                        </h2>
 
-                                Travel Statistics
+                        <div
+                            className="
+                            grid
+                            grid-cols-1
+                            md:grid-cols-2
+                            gap-6
+                            "
+                        >
 
-                            </h2>
+                            {[
+                                {
+                                    title:
+                                        "Total Bookings",
+                                    value:
+                                        "12",
+                                    icon:
+                                        <FaPlane />,
+                                    bg:
+                                        "bg-cyan-500/10",
+                                    text:
+                                        "text-cyan-500",
+                                },
 
-                            <div
-                                className="
-                                grid
-                                grid-cols-1
-                                md:grid-cols-2
-                                gap-6
-                                "
-                            >
+                                {
+                                    title:
+                                        "Countries Visited",
+                                    value:
+                                        "18",
+                                    icon:
+                                        <FaRegCompass />,
+                                    bg:
+                                        "bg-green-500/10",
+                                    text:
+                                        "text-green-500",
+                                },
 
-                                {/* CARD */}
+                                {
+                                    title:
+                                        "Upcoming Trips",
+                                    value:
+                                        "2",
+                                    icon:
+                                        <FaSuitcaseRolling />,
+                                    bg:
+                                        "bg-orange-500/10",
+                                    text:
+                                        "text-orange-500",
+                                },
 
-                                <div
-                                    className="
-                                    rounded-[30px]
-                                    border
-                                    border-base-300
-                                    bg-base-200/60
-                                    backdrop-blur-xl
-                                    p-7
-                                    shadow-[0_10px_40px_rgba(0,0,0,0.05)]
-                                    flex
-                                    items-center
-                                    justify-between
-                                    transition-all
-                                    duration-300
-                                    hover:-translate-y-1
-                                    "
-                                >
-
-                                    <div>
-
-                                        <p className="text-base-content/60">
-
-                                            Total Bookings
-
-                                        </p>
-
-                                        <h3
-                                            className="
-                                            mt-3
-                                            text-4xl
-                                            font-black
-                                            text-base-content
-                                            "
-                                        >
-
-                                            12
-
-                                        </h3>
-
-                                    </div>
-
-                                    <div
-                                        className="
-                                        w-16
-                                        h-16
-                                        rounded-2xl
-                                        bg-cyan-500/10
-                                        text-cyan-500
-                                        flex
-                                        items-center
-                                        justify-center
-                                        text-2xl
-                                        "
-                                    >
-
-                                        <FaPlane />
-
-                                    </div>
-
-                                </div>
-
-                                {/* CARD */}
-
-                                <div
-                                    className="
-                                    rounded-[30px]
-                                    border
-                                    border-base-300
-                                    bg-base-200/60
-                                    backdrop-blur-xl
-                                    p-7
-                                    shadow-[0_10px_40px_rgba(0,0,0,0.05)]
-                                    flex
-                                    items-center
-                                    justify-between
-                                    transition-all
-                                    duration-300
-                                    hover:-translate-y-1
-                                    "
-                                >
-
-                                    <div>
-
-                                        <p className="text-base-content/60">
-
-                                            Countries Visited
-
-                                        </p>
-
-                                        <h3
-                                            className="
-                                            mt-3
-                                            text-4xl
-                                            font-black
-                                            text-base-content
-                                            "
-                                        >
-
-                                            18
-
-                                        </h3>
-
-                                    </div>
+                                {
+                                    title:
+                                        "Total Spent",
+                                    value:
+                                        "$15,750",
+                                    icon:
+                                        <MdPayments />,
+                                    bg:
+                                        "bg-pink-500/10",
+                                    text:
+                                        "text-pink-500",
+                                },
+                            ].map(
+                                (
+                                    item,
+                                    index
+                                ) => (
 
                                     <div
+                                        key={
+                                            index
+                                        }
                                         className="
-                                        w-16
-                                        h-16
-                                        rounded-2xl
-                                        bg-green-500/10
-                                        text-green-500
-                                        flex
-                                        items-center
-                                        justify-center
-                                        text-2xl
-                                        "
-                                    >
-
-                                        <FaRegCompass />
-
-                                    </div>
-
-                                </div>
-
-                                {/* CARD */}
-
-                                <div
-                                    className="
-                                    rounded-[30px]
-                                    border
-                                    border-base-300
-                                    bg-base-200/60
-                                    backdrop-blur-xl
-                                    p-7
-                                    shadow-[0_10px_40px_rgba(0,0,0,0.05)]
-                                    flex
-                                    items-center
-                                    justify-between
-                                    transition-all
-                                    duration-300
-                                    hover:-translate-y-1
-                                    "
-                                >
-
-                                    <div>
-
-                                        <p className="text-base-content/60">
-
-                                            Upcoming Trips
-
-                                        </p>
-
-                                        <h3
-                                            className="
-                                            mt-3
-                                            text-4xl
-                                            font-black
-                                            text-base-content
-                                            "
-                                        >
-
-                                            2
-
-                                        </h3>
-
-                                    </div>
-
-                                    <div
-                                        className="
-                                        w-16
-                                        h-16
-                                        rounded-2xl
-                                        bg-orange-500/10
-                                        text-orange-500
-                                        flex
-                                        items-center
-                                        justify-center
-                                        text-2xl
-                                        "
-                                    >
-
-                                        <FaSuitcaseRolling />
-
-                                    </div>
-
-                                </div>
-
-                                {/* CARD */}
-
-                                <div
-                                    className="
-                                    rounded-[30px]
-                                    border
-                                    border-base-300
-                                    bg-base-200/60
-                                    backdrop-blur-xl
-                                    p-7
-                                    shadow-[0_10px_40px_rgba(0,0,0,0.05)]
-                                    flex
-                                    items-center
-                                    justify-between
-                                    transition-all
-                                    duration-300
-                                    hover:-translate-y-1
-                                    "
-                                >
-
-                                    <div>
-
-                                        <p className="text-base-content/60">
-
-                                            Total Spent
-
-                                        </p>
-
-                                        <h3
-                                            className="
-                                            mt-3
-                                            text-4xl
-                                            font-black
-                                            text-base-content
-                                            "
-                                        >
-
-                                            $15,750
-
-                                        </h3>
-
-                                    </div>
-
-                                    <div
-                                        className="
-                                        w-16
-                                        h-16
-                                        rounded-2xl
-                                        bg-pink-500/10
-                                        text-pink-500
-                                        flex
-                                        items-center
-                                        justify-center
-                                        text-2xl
-                                        "
-                                    >
-
-                                        <MdPayments />
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        {/* ACTIVITY */}
-
-                        <div className="mt-10">
-
-                            <h2
-                                className="
-                                text-3xl
-                                font-black
-                                text-base-content
-                                mb-7
-                                "
-                            >
-
-                                Recent Activity
-
-                            </h2>
-
-                            <div
-                                className="
-                                rounded-[36px]
-                                border
-                                border-base-300
-                                bg-base-200/60
-                                backdrop-blur-xl
-                                p-8
-                                shadow-[0_15px_50px_rgba(0,0,0,0.06)]
-                                "
-                            >
-
-                                <div className="space-y-6">
-
-                                    <div
-                                        className="
-                                        flex
-                                        items-start
-                                        gap-5
-                                        pb-6
-                                        border-b
+                                        rounded-[30px]
+                                        border
                                         border-base-300
-                                        "
-                                    >
-
-                                        <div
-                                            className="
-                                            w-14
-                                            h-14
-                                            rounded-2xl
-                                            bg-cyan-500/10
-                                            text-cyan-500
-                                            flex
-                                            items-center
-                                            justify-center
-                                            text-xl
-                                            "
-                                        >
-
-                                            ✈
-
-                                        </div>
-
-                                        <div>
-
-                                            <h3 className="font-bold text-lg text-base-content">
-
-                                                Booked Bali Adventure Tour
-
-                                            </h3>
-
-                                            <p className="mt-1 text-base-content/60">
-
-                                                Your booking has been confirmed.
-
-                                            </p>
-
-                                            <span className="mt-2 inline-block text-sm text-cyan-500 font-semibold">
-
-                                                2 days ago
-
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div
-                                        className="
+                                        bg-base-200/60
+                                        backdrop-blur-xl
+                                        p-7
+                                        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
                                         flex
-                                        items-start
-                                        gap-5
-                                        pb-6
-                                        border-b
-                                        border-base-300
+                                        items-center
+                                        justify-between
                                         "
                                     >
 
-                                        <div
-                                            className="
-                                            w-14
-                                            h-14
-                                            rounded-2xl
-                                            bg-green-500/10
-                                            text-green-500
-                                            flex
-                                            items-center
-                                            justify-center
-                                            text-xl
-                                            "
-                                        >
-
-                                            ⭐
-
-                                        </div>
-
                                         <div>
 
-                                            <h3 className="font-bold text-lg text-base-content">
+                                            <p className="text-base-content/60">
 
-                                                Reviewed Santorini Package
-
-                                            </h3>
-
-                                            <p className="mt-1 text-base-content/60">
-
-                                                You rated your trip 5 stars.
+                                                {
+                                                    item.title
+                                                }
 
                                             </p>
 
-                                            <span className="mt-2 inline-block text-sm text-green-500 font-semibold">
+                                            <h3
+                                                className="
+                                                mt-3
+                                                text-4xl
+                                                font-black
+                                                "
+                                            >
 
-                                                1 week ago
+                                                {
+                                                    item.value
+                                                }
 
-                                            </span>
+                                            </h3>
+
+                                        </div>
+
+                                        <div
+                                            className={`
+                                            w-16
+                                            h-16
+                                            rounded-2xl
+                                            flex
+                                            items-center
+                                            justify-center
+                                            text-2xl
+                                            ${item.bg}
+                                            ${item.text}
+                                            `}
+                                        >
+
+                                            {
+                                                item.icon
+                                            }
 
                                         </div>
 
                                     </div>
-
-                                    <div
-                                        className="
-                                        flex
-                                        items-start
-                                        gap-5
-                                        "
-                                    >
-
-                                        <div
-                                            className="
-                                            w-14
-                                            h-14
-                                            rounded-2xl
-                                            bg-orange-500/10
-                                            text-orange-500
-                                            flex
-                                            items-center
-                                            justify-center
-                                            text-xl
-                                            "
-                                        >
-
-                                            🌍
-
-                                        </div>
-
-                                        <div>
-
-                                            <h3 className="font-bold text-lg text-base-content">
-
-                                                Updated Travel Preferences
-
-                                            </h3>
-
-                                            <p className="mt-1 text-base-content/60">
-
-                                                Your profile settings were updated.
-
-                                            </p>
-
-                                            <span className="mt-2 inline-block text-sm text-orange-500 font-semibold">
-
-                                                2 weeks ago
-
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
+                                )
+                            )}
 
                         </div>
 
@@ -896,6 +687,248 @@ const ProfilePage = () => {
                 </div>
 
             </div>
+
+            {/* MODAL */}
+
+            {
+                isOpen && (
+
+                    <div
+                        className="
+            fixed
+            inset-0
+            z-50
+            flex
+            items-center
+            justify-center
+            bg-black/60
+            backdrop-blur-sm
+            p-4
+            "
+                    >
+
+                        <div
+                            className="
+                w-full
+                max-w-2xl
+                rounded-[32px]
+                bg-base-100
+                border
+                border-base-300
+                p-8
+                relative
+                "
+                        >
+
+                            {/* CLOSE BTN */}
+
+                            <button
+                                onClick={() =>
+                                    setIsOpen(
+                                        false
+                                    )
+                                }
+                                className="
+                    absolute
+                    top-5
+                    right-5
+                    w-10
+                    h-10
+                    rounded-full
+                    bg-base-200
+                    hover:bg-red-500
+                    hover:text-white
+                    transition-all
+                    duration-300
+                    "
+                            >
+
+                                ✕
+
+                            </button>
+
+                            {/* TITLE */}
+
+                            <h2
+                                className="
+                    text-3xl
+                    font-black
+                    text-base-content
+                    mb-8
+                    "
+                            >
+
+                                Edit Profile
+
+                            </h2>
+
+                            {/* FORM */}
+
+                            <form
+                                onSubmit={
+                                    handleUpdate
+                                }
+                                className="space-y-6"
+                            >
+
+                                {/* NAME */}
+
+                                <div>
+
+                                    <label className="font-semibold">
+
+                                        Full Name
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={
+                                            formData.name
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        className="
+                            w-full
+                            mt-2
+                            h-14
+                            rounded-2xl
+                            bg-base-200
+                            border
+                            border-base-300
+                            px-5
+                            outline-none
+                            "
+                                    />
+
+                                </div>
+
+                                {/* IMAGE */}
+
+                                <div>
+
+                                    <label className="font-semibold">
+
+                                        Profile Image URL
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="image"
+                                        value={
+                                            formData.image
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        className="
+                            w-full
+                            mt-2
+                            h-14
+                            rounded-2xl
+                            bg-base-200
+                            border
+                            border-base-300
+                            px-5
+                            outline-none
+                            "
+                                    />
+
+                                </div>
+
+                                {/* LOCATION */}
+
+                                <div>
+
+                                    <label className="font-semibold">
+
+                                        Location
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={
+                                            formData.location
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        className="
+                            w-full
+                            mt-2
+                            h-14
+                            rounded-2xl
+                            bg-base-200
+                            border
+                            border-base-300
+                            px-5
+                            outline-none
+                            "
+                                    />
+
+                                </div>
+
+                                {/* BUTTONS */}
+
+                                <div className="flex justify-end gap-4 pt-4">
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setIsOpen(
+                                                false
+                                            )
+                                        }
+                                        className="
+                            px-6
+                            h-12
+                            rounded-2xl
+                            bg-base-200
+                            font-semibold
+                            "
+                                    >
+
+                                        Cancel
+
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        disabled={
+                                            loading
+                                        }
+                                        className="
+                            px-8
+                            h-12
+                            rounded-2xl
+                            bg-linear-to-r
+                            from-cyan-500
+                            to-blue-600
+                            text-white
+                            font-bold
+                            "
+                                    >
+
+                                        {loading
+                                            ? "Updating..."
+                                            : "Save Changes"}
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                )
+            }
 
         </section>
     );

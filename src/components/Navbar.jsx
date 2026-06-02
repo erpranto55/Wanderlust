@@ -1,11 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+
 import React, {
     useEffect,
     useRef,
     useState,
 } from "react";
+
+import { useRouter } from "next/navigation";
 
 import {
     HiMenuAlt3,
@@ -20,10 +24,14 @@ import {
     FaSignOutAlt,
 } from "react-icons/fa";
 
+import { toast } from "react-toastify";
+
 import { authClient } from "@/lib/auth-client";
-import Image from "next/image";
 
 const Navbar = () => {
+
+    const router =
+        useRouter();
 
     const [isOpen, setIsOpen] =
         useState(false);
@@ -50,8 +58,9 @@ const Navbar = () => {
     useEffect(() => {
 
         const savedTheme =
-            localStorage.getItem("theme") ||
-            "light";
+            localStorage.getItem(
+                "theme"
+            ) || "light";
 
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setTheme(savedTheme);
@@ -92,15 +101,50 @@ const Navbar = () => {
         const getSession =
             async () => {
 
-                const session =
-                    await authClient.getSession();
+                try {
 
-                if (
-                    session?.data?.user
-                ) {
+                    const session =
+                        await authClient.getSession();
 
-                    setUser(
-                        session.data.user
+                    console.log(
+                        "SESSION:",
+                        session
+                    );
+
+                    if (
+                        session?.data?.user
+                    ) {
+
+                        const currentUser = {
+
+                            ...session.data.user,
+
+                            image:
+                                session.data.user
+                                    .image ||
+                                session.user
+                                    ?.image ||
+                                "",
+                        };
+
+                        console.log(
+                            "USER:",
+                            currentUser
+                        );
+
+                        setUser(
+                            currentUser
+                        );
+
+                        setImageError(
+                            false
+                        );
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        error
                     );
                 }
             };
@@ -153,10 +197,32 @@ const Navbar = () => {
     const handleLogout =
         async () => {
 
-            await authClient.signOut();
+            try {
 
-            window.location.href =
-                "/";
+                await authClient.signOut();
+
+                sessionStorage.removeItem(
+                    "welcome-toast"
+                );
+
+                toast.success(
+                    "Logged out successfully!"
+                );
+
+                setUser(null);
+
+                router.push("/login");
+
+                router.refresh();
+
+            } catch (error) {
+
+                toast.error(
+                    "Logout failed!"
+                );
+
+                console.error(error);
+            }
         };
 
     // ====================================
@@ -220,6 +286,7 @@ const Navbar = () => {
     );
 
     return (
+
         <nav className="sticky top-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-500">
 
             <div className="max-w-7xl mx-auto px-4">
@@ -283,10 +350,10 @@ const Navbar = () => {
                                             !dropdownOpen
                                         )
                                     }
-                                    className="w-12 h-12 rounded-full overflow-hidden border-2 border-cyan-500 shadow-lg"
+                                    className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-cyan-500 shadow-lg"
                                 >
 
-                                    {user.image &&
+                                    {user?.image?.trim() &&
                                         !imageError ? (
 
                                         <Image
@@ -295,12 +362,24 @@ const Navbar = () => {
                                             }
                                             fill
                                             alt="profile"
-                                            className="w-full h-full object-cover"
-                                            onError={() =>
+                                            unoptimized
+                                            className="object-cover"
+                                            onLoad={() =>
                                                 setImageError(
-                                                    true
+                                                    false
                                                 )
                                             }
+                                            onError={() => {
+
+                                                console.log(
+                                                    "IMAGE FAILED:",
+                                                    user.image
+                                                );
+
+                                                setImageError(
+                                                    true
+                                                );
+                                            }}
                                         />
 
                                     ) : (
@@ -437,6 +516,7 @@ const Navbar = () => {
                         </button>
 
                     </div>
+
                 </div>
 
                 {/* MOBILE MENU */}
@@ -503,6 +583,7 @@ const Navbar = () => {
                             )}
 
                         </div>
+
                     </div>
                 )}
 
