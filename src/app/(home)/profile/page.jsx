@@ -4,7 +4,6 @@ import React, {
     useState,
 } from "react";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -25,13 +24,11 @@ import {
     authClient,
     useAuthSession,
 } from "@/lib/auth-client";
+import UserAvatar from "@/components/UserAvatar";
 
 const ProfilePage = () => {
 
     const router = useRouter();
-
-    const [failedImage, setFailedImage] =
-        useState("");
 
     const [loading, setLoading] =
         useState(false);
@@ -58,10 +55,6 @@ const ProfilePage = () => {
     const userImage =
         user?.image?.trim() || "";
 
-    const canShowUserImage =
-        userImage &&
-        failedImage !== userImage;
-
     const openEditModal = () => {
 
         setFormData({
@@ -77,8 +70,6 @@ const ProfilePage = () => {
                 user?.location ||
                 "Bangladesh",
         });
-
-        setFailedImage("");
 
         setIsOpen(true);
     };
@@ -315,27 +306,10 @@ const ProfilePage = () => {
                                     "
                                 >
 
-                                    {canShowUserImage ? (
-
-                                        <Image
-                                            src={userImage}
-                                            alt="profile"
-                                            width={160}
-                                            height={160}
-                                            unoptimized
-                                            className="w-full h-full object-cover"
-                                            onLoad={() =>
-                                                setFailedImage("")
-                                            }
-                                            onError={() =>
-                                                setFailedImage(
-                                                    userImage
-                                                )
-                                            }
-                                        />
-
-                                    ) : (
-
+                                    <UserAvatar
+                                        src={userImage}
+                                        className="w-full h-full object-cover"
+                                        fallback={
                                         <div
                                             className="
                                             w-full
@@ -357,7 +331,8 @@ const ProfilePage = () => {
                                             ) || "U"}
 
                                         </div>
-                                    )}
+                                        }
+                                    />
 
                                 </div>
 

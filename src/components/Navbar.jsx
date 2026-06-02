@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 
 import React, {
     useEffect,
@@ -30,6 +29,7 @@ import {
     authClient,
     useAuthSession,
 } from "@/lib/auth-client";
+import UserAvatar from "./UserAvatar";
 
 const Navbar = () => {
 
@@ -44,9 +44,6 @@ const Navbar = () => {
 
     const [dropdownOpen, setDropdownOpen] =
         useState(false);
-
-    const [failedImage, setFailedImage] =
-        useState("");
 
     const {
         data: session,
@@ -102,10 +99,6 @@ const Navbar = () => {
 
     const userImage =
         user?.image?.trim() || "";
-
-    const canShowUserImage =
-        userImage &&
-        failedImage !== userImage;
 
     // ====================================
     // CLOSE DROPDOWN
@@ -307,37 +300,17 @@ const Navbar = () => {
                                     className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-cyan-500 shadow-lg"
                                 >
 
-                                    {canShowUserImage ? (
-
-                                        <Image
-                                            src={
-                                                userImage
-                                            }
-                                            fill
-                                            alt="profile"
-                                            unoptimized
-                                            className="object-cover"
-                                            onLoad={() =>
-                                                setFailedImage(
-                                                    ""
-                                                )
-                                            }
-                                            onError={() => {
-
-                                                setFailedImage(
-                                                    userImage
-                                                );
-                                            }}
-                                        />
-
-                                    ) : (
-
+                                    <UserAvatar
+                                        src={userImage}
+                                        className="w-full h-full object-cover"
+                                        fallback={
                                         <div className="w-full h-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-2xl text-cyan-500">
 
                                             <FaUserCircle />
 
                                         </div>
-                                    )}
+                                        }
+                                    />
 
                                 </button>
 
