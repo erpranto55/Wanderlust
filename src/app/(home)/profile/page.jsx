@@ -1,6 +1,8 @@
 "use client";
 
 import React, {
+    useEffect,
+    useMemo,
     useState,
 } from "react";
 
@@ -22,6 +24,7 @@ import { toast } from "react-toastify";
 
 import {
     authClient,
+    getAuthToken,
     useAuthSession,
 } from "@/lib/auth-client";
 import UserAvatar from "@/components/UserAvatar";
@@ -32,6 +35,12 @@ const ProfilePage = () => {
 
     const [loading, setLoading] =
         useState(false);
+
+    const [statsLoading, setStatsLoading] =
+        useState(false);
+
+    const [bookings, setBookings] =
+        useState([]);
 
     const [isOpen, setIsOpen] =
         useState(false);
@@ -54,6 +63,188 @@ const ProfilePage = () => {
 
     const userImage =
         user?.image?.trim() || "";
+
+    useEffect(() => {
+
+        if (!user?.email) return;
+
+        const loadBookings =
+            async () => {
+
+                try {
+
+                    setStatsLoading(true);
+
+                    const token =
+                        await getAuthToken();
+
+                    const res =
+                        await fetch(
+                            `${process.env.NEXT_PUBLIC_URL}/bookings/${encodeURIComponent(user.email)}`,
+                            {
+                                headers: {
+                                    authorization:
+                                        `Bearer ${token}`,
+                                },
+                            }
+                        );
+
+                    if (!res.ok) {
+
+                        throw new Error(
+                            "Failed to load travel statistics"
+                        );
+                    }
+
+                    const data =
+                        await res.json();
+
+                    setBookings(
+                        Array.isArray(data)
+                            ? data
+                            : []
+                    );
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    toast.error(
+                        error.message
+                    );
+
+                    setBookings([]);
+
+                } finally {
+
+                    setStatsLoading(false);
+                }
+            };
+
+        loadBookings();
+
+    }, [user?.email]);
+
+    const travelStats =
+        useMemo(() => {
+
+            const today =
+                new Date();
+
+            today.setHours(
+                0,
+                0,
+                0,
+                0
+            );
+
+            const countries =
+                new Set(
+                    bookings
+                        .map((booking) =>
+                            booking.country
+                                ?.trim()
+                                .toLowerCase()
+                        )
+                        .filter(Boolean)
+                );
+
+            const upcomingTrips =
+                bookings.filter(
+                    (booking) => {
+
+                        if (
+                            !booking.departureDate
+                        ) {
+
+                            return false;
+                        }
+
+                        const departureDate =
+                            new Date(
+                                booking.departureDate
+                            );
+
+                        if (
+                            Number.isNaN(
+                                departureDate.getTime()
+                            )
+                        ) {
+
+                            return false;
+                        }
+
+                        departureDate.setHours(
+                            0,
+                            0,
+                            0,
+                            0
+                        );
+
+                        return (
+                            departureDate >=
+                            today
+                        );
+                    }
+                ).length;
+
+            const totalSpent =
+                bookings.reduce(
+                    (total, booking) => {
+
+                        const bookingTotal =
+                            Number(
+                                booking.totalPrice
+                            );
+
+                        if (
+                            Number.isFinite(
+                                bookingTotal
+                            )
+                        ) {
+
+                            return (
+                                total +
+                                bookingTotal
+                            );
+                        }
+
+                        return (
+                            total +
+                            Number(
+                                booking.pricePerPerson ||
+                                booking.price ||
+                                0
+                            ) *
+                            Number(
+                                booking.travelers ||
+                                1
+                            )
+                        );
+                    },
+                    0
+                );
+
+            return {
+                totalBookings:
+                    bookings.length,
+                countriesVisited:
+                    countries.size,
+                upcomingTrips,
+                totalSpent,
+            };
+
+        }, [bookings]);
+
+    const formatCurrency = (value) =>
+        new Intl.NumberFormat(
+            "en-US",
+            {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+            }
+        ).format(value);
 
     const openEditModal = () => {
 
@@ -556,7 +747,8 @@ const ProfilePage = () => {
                                     title:
                                         "Total Bookings",
                                     value:
-                                        "12",
+                                        travelStats
+                                            .totalBookings,
                                     icon:
                                         <FaPlane />,
                                     bg:
@@ -569,7 +761,8 @@ const ProfilePage = () => {
                                     title:
                                         "Countries Visited",
                                     value:
-                                        "18",
+                                        travelStats
+                                            .countriesVisited,
                                     icon:
                                         <FaRegCompass />,
                                     bg:
@@ -582,7 +775,8 @@ const ProfilePage = () => {
                                     title:
                                         "Upcoming Trips",
                                     value:
-                                        "2",
+                                        travelStats
+                                            .upcomingTrips,
                                     icon:
                                         <FaSuitcaseRolling />,
                                     bg:
@@ -595,7 +789,10 @@ const ProfilePage = () => {
                                     title:
                                         "Total Spent",
                                     value:
-                                        "$15,750",
+                                        formatCurrency(
+                                            travelStats
+                                                .totalSpent
+                                        ),
                                     icon:
                                         <MdPayments />,
                                     bg:
@@ -646,7 +843,9 @@ const ProfilePage = () => {
                                             >
 
                                                 {
-                                                    item.value
+                                                    statsLoading
+                                                        ? "..."
+                                                        : item.value
                                                 }
 
                                             </h3>
