@@ -14,7 +14,7 @@ const Banner = () => {
 
             {/* Background */}
             <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-[url('/assets/banner.png')] bg-cover bg-center scale-105"></div>
+                <div className="absolute inset-0 bg-[url('/assets/Banner.png')] bg-cover bg-center scale-105"></div>
 
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/60 to-black/40"></div>
