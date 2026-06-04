@@ -8,7 +8,7 @@ import React, {
     useState,
 } from "react";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 import {
     HiMenuAlt3,
@@ -36,6 +36,9 @@ const Navbar = () => {
     const router =
         useRouter();
 
+    const pathname =
+        usePathname();
+
     const [isOpen, setIsOpen] =
         useState(false);
 
@@ -55,6 +58,20 @@ const Navbar = () => {
 
     const dropdownRef =
         useRef(null);
+
+    // Returns true when the nav link should be highlighted
+    const isActive = (href) => {
+        if (href === "/") return pathname === "/";
+        // prefix-match so /destination/[id] also activates the Destination tab
+        return pathname.startsWith(href);
+    };
+
+    const linkClass = (href) =>
+        `relative transition-all duration-300 font-medium ${
+            isActive(href)
+                ? "text-cyan-500"
+                : "hover:text-cyan-500 text-gray-700 dark:text-gray-200"
+        }`;
 
     // ====================================
     // THEME
@@ -178,57 +195,25 @@ const Navbar = () => {
 
     const navLinks = (
         <>
-            <li>
-
-                <Link
-                    href="/"
-                    className="hover:text-cyan-500 transition-all duration-300"
-                >
-
-                    Home
-
-                </Link>
-
-            </li>
-
-            <li>
-
-                <Link
-                    href="/destination"
-                    className="hover:text-cyan-500 transition-all duration-300"
-                >
-
-                    Destination
-
-                </Link>
-
-            </li>
-
-            <li>
-
-                <Link
-                    href="/my-bookings"
-                    className="hover:text-cyan-500 transition-all duration-300"
-                >
-
-                    My Bookings
-
-                </Link>
-
-            </li>
-
-            <li>
-
-                <Link
-                    href="/add-destination"
-                    className="hover:text-cyan-500 transition-all duration-300"
-                >
-
-                    Add Destination
-
-                </Link>
-
-            </li>
+            {[
+                { href: "/", label: "Home" },
+                { href: "/destination", label: "Destination" },
+                { href: "/my-bookings", label: "My Bookings" },
+                { href: "/add-destination", label: "Add Destination" },
+            ].map(({ href, label }) => (
+                <li key={href}>
+                    <Link
+                        href={href}
+                        className={linkClass(href)}
+                    >
+                        {label}
+                        {/* Active underline indicator */}
+                        {isActive(href) && (
+                            <span className="absolute -bottom-1 left-0 w-full h-0.5 rounded-full bg-cyan-500" />
+                        )}
+                    </Link>
+                </li>
+            ))}
         </>
     );
 

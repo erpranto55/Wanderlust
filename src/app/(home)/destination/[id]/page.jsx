@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
 import {
@@ -21,14 +22,29 @@ const DestinationDetails = async ({ params }) => {
 
     const { id } = await params;
 
-    const { token } = await auth.api.getToken({
-        headers: await headers()
-    })
+    let token = null;
+    try {
+        const tokenResult = await auth.api.getToken({
+            headers: await headers()
+        });
+        token = tokenResult?.token ?? null;
+    } catch (err) {
+        console.error("[DestinationDetails] getToken failed:", err);
+    }
+
+    // If no token, user session has expired — send them to login
+    if (!token) {
+        redirect(`/login?callbackUrl=/destination/${id}`);
+    }
+
     let destination = null;
 
     try {
+        const serverUrl = process.env.NEXT_PUBLIC_URL;
+        console.log(`[DestinationDetails] Fetching: ${serverUrl}/destination/${id}`);
+
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_URL}/destination/${id}`,
+            `${serverUrl}/destination/${id}`,
             {
                 headers: {
                     authorization: `Bearer ${token}`
@@ -37,13 +53,15 @@ const DestinationDetails = async ({ params }) => {
             }
         );
 
+        console.log(`[DestinationDetails] Server responded: ${res.status}`);
+
         if (res.ok) {
             destination = await res.json();
             // Guard against error-object responses (e.g. { message: "Unauthorized" })
             if (!destination?._id) destination = null;
         }
     } catch (err) {
-        console.error("Failed to fetch destination:", err);
+        console.error("[DestinationDetails] Fetch failed:", err);
     }
 
     // NOT FOUND
