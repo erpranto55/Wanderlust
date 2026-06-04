@@ -28,6 +28,23 @@ Built with **Next.js 16 App Router**, **MongoDB**, **Better Auth**, **Tailwind C
 
 ---
 
+## Screenshots
+
+<div align="center">
+
+### 🏠 Homepage
+![Homepage](public/screenshots/homepage.png)
+
+### 🗺️ Destinations
+![Destinations](public/screenshots/destinations.png)
+
+### 📍 Destination Detail
+![Destination Detail](public/screenshots/details.png)
+
+</div>
+
+---
+
 ## Features
 
 - **Authentication** — Secure sign-up and login via Better Auth, with protected routes for booking and listing management.
