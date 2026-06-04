@@ -10,7 +10,11 @@
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-[Live Demo](https://wanderlust-ten-psi.vercel.app/) · [Report Bug](https://github.com/erpranto55/Wanderlust/issues) · [Request Feature](https://github.com/erpranto55/Wanderlust/issues)
+[Live Demo](https://wanderlust-ten-psi.vercel.app/) ·
+[Server Repository](https://github.com/erpranto55/Wanderlust-server) ·
+[Report Bug](https://github.com/erpranto55/Wanderlust/issues) ·
+[Request Feature](https://github.com/erpranto55/Wanderlust/issues) ·
+
 
 </div>
 
