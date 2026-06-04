@@ -6,7 +6,15 @@ import { jwt } from "better-auth/plugins";
 const client = new MongoClient(process.env.MONGODB_URI);
 const db = client.db("wanderlust");
 
+const appUrl =
+  process.env.BETTER_AUTH_URL ||
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : undefined);
+
 export const auth = betterAuth({
+  baseURL: appUrl,
+  trustedOrigins: appUrl ? [appUrl] : [],
   database: mongodbAdapter(db, {
     // Optional: if you don't provide a client, database transactions won't be enabled.
     client,
