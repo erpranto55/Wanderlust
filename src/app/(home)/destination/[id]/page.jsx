@@ -24,16 +24,46 @@ const DestinationDetails = async ({ params }) => {
     const { token } = await auth.api.getToken({
         headers: await headers()
     })
-    const res = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/destination/${id}`,
-        {
-            headers: {
-                authorization: `Bearer ${token}`
-            },
-        }
-    );
+    let destination = null;
 
-    const destination = await res.json();
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_URL}/destination/${id}`,
+            {
+                headers: {
+                    authorization: `Bearer ${token}`
+                },
+                cache: "no-store",
+            }
+        );
+
+        if (res.ok) {
+            destination = await res.json();
+            // Guard against error-object responses (e.g. { message: "Unauthorized" })
+            if (!destination?._id) destination = null;
+        }
+    } catch (err) {
+        console.error("Failed to fetch destination:", err);
+    }
+
+    // NOT FOUND
+    if (!destination) {
+        return (
+            <section className="relative min-h-screen bg-base-100 flex items-center justify-center">
+                <div className="text-center space-y-6 px-4">
+                    <h1 className="text-5xl font-black text-base-content">Destination Not Found</h1>
+                    <p className="text-base-content/60 text-lg">We couldn&apos;t load this destination. It may have been removed or you may need to log in.</p>
+                    <Link
+                        href="/destination"
+                        className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-cyan-500 text-white font-bold hover:bg-cyan-600 transition-all duration-300"
+                    >
+                        <FaArrowLeft />
+                        Back To Destinations
+                    </Link>
+                </div>
+            </section>
+        );
+    }
 
     // REVIEWS
 

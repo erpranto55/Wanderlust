@@ -38,8 +38,20 @@ Built with **Next.js 16 App Router**, **MongoDB**, **Better Auth**, **Tailwind C
 ### 🗺️ Destinations
 ![Destinations](public/screenshots/destinations.png)
 
-### 📍 Destination Detail
-![Destination Detail](public/screenshots/details.png)
+### ➕ Add Destination
+![Add Destination](public/screenshots/add-destination.png)
+
+### 📅 My Bookings
+![My Bookings](public/screenshots/my-bookings.png)
+
+### 👤 Profile
+![Profile](public/screenshots/profile.png)
+
+### 🔐 Login
+![Login](public/screenshots/login.png)
+
+### 📝 Sign Up
+![Sign Up](public/screenshots/signup.png)
 
 </div>
 
