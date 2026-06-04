@@ -32,26 +32,44 @@ Built with **Next.js 16 App Router**, **MongoDB**, **Better Auth**, **Tailwind C
 
 <div align="center">
 
-### 🏠 Homepage
-![Homepage](public/screenshots/homepage.png)
-
-### 🗺️ Destinations
-![Destinations](public/screenshots/destinations.png)
-
-### ➕ Add Destination
-![Add Destination](public/screenshots/add-destination.png)
-
-### 📅 My Bookings
-![My Bookings](public/screenshots/my-bookings.png)
-
-### 👤 Profile
-![Profile](public/screenshots/profile.png)
-
-### 🔐 Login
-![Login](public/screenshots/login.png)
-
-### 📝 Sign Up
-![Sign Up](public/screenshots/signup.png)
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>🏠 Homepage</strong><br/>
+      <img src="public/screenshots/homepage.png" alt="Homepage" width="100%"/>
+    </td>
+    <td align="center" width="50%">
+      <strong>🗺️ Destinations</strong><br/>
+      <img src="public/screenshots/destinations.png" alt="Destinations" width="100%"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <strong>➕ Add Destination</strong><br/>
+      <img src="public/screenshots/add-destination.png" alt="Add Destination" width="100%"/>
+    </td>
+    <td align="center" width="50%">
+      <strong>📅 My Bookings</strong><br/>
+      <img src="public/screenshots/my-bookings.png" alt="My Bookings" width="100%"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <strong>🔐 Login</strong><br/>
+      <img src="public/screenshots/login.png" alt="Login" width="100%"/>
+    </td>
+    <td align="center" width="50%">
+      <strong>📝 Sign Up</strong><br/>
+      <img src="public/screenshots/signup.png" alt="Sign Up" width="100%"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <strong>👤 Profile</strong><br/>
+      <img src="public/screenshots/profile.png" alt="Profile" width="50%"/>
+    </td>
+  </tr>
+</table>
 
 </div>
 
