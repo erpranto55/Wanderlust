@@ -1,6 +1,8 @@
 import BookingCard from "@/components/BookingCard";
 import DeleteModal from "@/components/DeleteModal";
 import { EditModal } from "@/components/EditModal";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -19,13 +21,15 @@ const DestinationDetails = async ({ params }) => {
 
     const { id } = await params;
 
+    const { token } = await auth.api.getToken({
+        headers: await headers()
+    })
     const res = await fetch(
-        `http://localhost:5000/destination/${id}`,
+        `${process.env.NEXT_PUBLIC_URL}/destination/${id}`,
         {
             headers: {
-                authorization: 'logged in'
+                authorization: `Bearer ${token}`
             },
-            cache: "no-store",
         }
     );
 

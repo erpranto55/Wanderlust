@@ -33,7 +33,7 @@ const DeleteModal = ({ id }) => {
             setIsDeleting(true);
 
             const res = await fetch(
-                `http://localhost:5000/destination/${id}`,
+                `${process.env.NEXT_PUBLIC_URL}/destination/${id}`,
                 {
                     method: "DELETE",
                 }

@@ -126,7 +126,7 @@ export function EditModal({ destination }) {
             setIsSubmitting(true);
 
             const res = await fetch(
-                `http://localhost:5000/destination/${destination._id}`,
+                `${process.env.NEXT_PUBLIC_URL}/destination/${destination._id}`,
                 {
                     method: "PUT",
 

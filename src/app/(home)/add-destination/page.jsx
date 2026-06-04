@@ -108,7 +108,7 @@ const AddDestination = () => {
             // API CALL
 
             const res = await fetch(
-                "http://localhost:5000/destination",
+                `${process.env.NEXT_PUBLIC_URL}/destination`,
                 {
                     method: "POST",
 

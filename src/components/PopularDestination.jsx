@@ -14,7 +14,7 @@ import {
 const PopularDestinations = async () => {
 
     const res = await fetch(
-        "http://localhost:5000/destination",
+        `${process.env.NEXT_PUBLIC_URL}/destination`,
         {
             cache: "no-store",
         }

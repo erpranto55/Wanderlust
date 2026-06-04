@@ -55,92 +55,53 @@ const BookingCard = ({
 
                 // SESSION
 
-                const session =
-                    await authClient.getSession();
+                const session = await authClient.getSession();
 
-                if (
-                    !session?.data?.user
-                ) {
-
-                    toast.error(
-                        "Please login first!"
-                    );
-
+                if (!session?.data?.user) {
+                    toast.error("Please login first!");
                     return;
                 }
 
                 // VALIDATION
 
                 if (!date) {
-
-                    toast.error(
-                        "Please select a date!"
-                    );
-
+                    toast.error("Please select a date!");
                     return;
                 }
 
                 // BOOKING OBJECT
 
                 const bookingData = {
-
-                    destinationId:
-                        destination._id,
-
-                    destinationName:
-                        destination.destinationName,
-
-                    image:
-                        destination.imageUrl,
-
-                    country:
-                        destination.country,
-
-                    duration:
-                        destination.duration,
-
-                    departureDate:
-                        date,
-
-                    travelers:
-                        persons,
-
-                    pricePerPerson:
-                        destination.price,
-
+                    destinationId: destination._id,
+                    destinationName: destination.destinationName,
+                    image: destination.imageUrl,
+                    country: destination.country,
+                    duration: destination.duration,
+                    departureDate: date,
+                    travelers: persons,
+                    pricePerPerson: destination.price,
                     totalPrice,
-
-                    userName:
-                        session.data.user.name,
-
-                    userEmail:
-                        session.data.user.email,
-
-                    userImage:
-                        session.data.user.image,
-
-                    bookingDate:
-                        new Date(),
+                    userName: session.data.user.name,
+                    userEmail: session.data.user.email,
+                    userImage: session.data.user.image,
+                    bookingDate: new Date(),
                 };
 
                 // SEND TO BACKEND
 
-                const res =
-                    await fetch(
-                        "http://localhost:5000/bookings",
-                        {
-                            method: "POST",
+                const { data: tokenData } = await authClient.token();
 
-                            headers: {
-                                "content-type":
-                                    "application/json",
-                            },
-
-                            body: JSON.stringify(
-                                bookingData
-                            ),
-                        }
-                    );
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_URL}/bookings`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "content-type": "application/json",
+                            authorization: `Bearer ${tokenData?.token}`
+                        },
+                        body: JSON.stringify(bookingData),
+                    }
+                );
 
                 if (!res.ok) {
 
