@@ -9,13 +9,24 @@ import {
 } from "react";
 
 export const authClient = createAuthClient({
-  baseURL:process.env.BETTER_AUTH_URL,
-  plugins:[
+  plugins: [
     jwtClient()
-  ]
+  ],
 });
 
 export const { signIn, signUp, useSession } = authClient;
+
+export const getAuthToken = async () => {
+  const { data, error } = await authClient.token();
+
+  if (error || !data?.token) {
+    throw new Error(
+      "Authentication token unavailable. Please log in again."
+    );
+  }
+
+  return data.token;
+};
 
 export const useAuthSession = () => {
   const [state, setState] = useState({

@@ -31,6 +31,7 @@ import {
 import Image from "next/image";
 
 import { toast } from "react-toastify";
+import { getAuthToken } from "@/lib/auth-client";
 
 const categories = [
     "Beach",
@@ -125,6 +126,9 @@ export function EditModal({ destination }) {
 
             setIsSubmitting(true);
 
+            const token =
+                await getAuthToken();
+
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_URL}/destination/${destination._id}`,
                 {
@@ -133,6 +137,8 @@ export function EditModal({ destination }) {
                     headers: {
                         "Content-Type":
                             "application/json",
+                        authorization:
+                            `Bearer ${token}`,
                     },
 
                     body: JSON.stringify(

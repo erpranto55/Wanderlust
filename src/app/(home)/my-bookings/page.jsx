@@ -21,7 +21,10 @@ import {
 
 import { toast } from "react-toastify";
 
-import { authClient } from "@/lib/auth-client";
+import {
+    authClient,
+    getAuthToken,
+} from "@/lib/auth-client";
 
 const MyBookingsPage = () => {
 
@@ -52,16 +55,15 @@ const MyBookingsPage = () => {
                         return;
                     }
 
-                    const {
-                        data: tokenData
-                    } = await authClient.token();
+                    const token =
+                        await getAuthToken();
 
                     const res =
                         await fetch(
                             `${process.env.NEXT_PUBLIC_URL}/bookings/${session.data.user.email}`,
                             {
                                 headers: {
-                                    authorization: `Bearer ${tokenData?.token}`
+                                    authorization: `Bearer ${token}`,
                                 },
                             }
                         );
@@ -106,9 +108,8 @@ const MyBookingsPage = () => {
 
             try {
 
-                const {
-                    data: tokenData
-                } = await authClient.token();
+                const token =
+                    await getAuthToken();
 
                 const res =
                     await fetch(
@@ -116,7 +117,7 @@ const MyBookingsPage = () => {
                         {
                             method: "DELETE",
                             headers: {
-                                authorization: `Bearer ${tokenData?.token}`
+                                authorization: `Bearer ${token}`,
                             }
                         }
                     );

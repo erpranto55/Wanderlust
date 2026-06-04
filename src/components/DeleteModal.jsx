@@ -16,6 +16,7 @@ import {
 } from "react-icons/fa";
 
 import { toast } from "react-toastify";
+import { getAuthToken } from "@/lib/auth-client";
 
 const DeleteModal = ({ id }) => {
 
@@ -32,10 +33,17 @@ const DeleteModal = ({ id }) => {
 
             setIsDeleting(true);
 
+            const token =
+                await getAuthToken();
+
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_URL}/destination/${id}`,
                 {
                     method: "DELETE",
+                    headers: {
+                        authorization:
+                            `Bearer ${token}`,
+                    },
                 }
             );
 

@@ -13,7 +13,10 @@ import {
 
 import { toast } from "react-toastify";
 
-import { authClient } from "@/lib/auth-client";
+import {
+    authClient,
+    getAuthToken,
+} from "@/lib/auth-client";
 
 const BookingCard = ({
     destination,
@@ -89,7 +92,8 @@ const BookingCard = ({
 
                 // SEND TO BACKEND
 
-                const { data: tokenData } = await authClient.token();
+                const token =
+                    await getAuthToken();
 
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_URL}/bookings`,
@@ -97,7 +101,7 @@ const BookingCard = ({
                         method: "POST",
                         headers: {
                             "content-type": "application/json",
-                            authorization: `Bearer ${tokenData?.token}`
+                            authorization: `Bearer ${token}`,
                         },
                         body: JSON.stringify(bookingData),
                     }

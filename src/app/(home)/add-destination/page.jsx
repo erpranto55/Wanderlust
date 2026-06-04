@@ -25,6 +25,7 @@ import {
 } from "react-icons/fa";
 
 import { toast } from "react-toastify";
+import { getAuthToken } from "@/lib/auth-client";
 
 const categories = [
     "Beach",
@@ -107,6 +108,9 @@ const AddDestination = () => {
 
             // API CALL
 
+            const token =
+                await getAuthToken();
+
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_URL}/destination`,
                 {
@@ -115,6 +119,8 @@ const AddDestination = () => {
                     headers: {
                         "Content-Type":
                             "application/json",
+                        authorization:
+                            `Bearer ${token}`,
                     },
 
                     body: JSON.stringify(
