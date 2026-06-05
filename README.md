@@ -65,7 +65,7 @@ Built with **Next.js 16 App Router**, **MongoDB**, **Better Auth**, **Tailwind C
   <tr>
     <td align="center" width="50%">
       <strong> Profile</strong><br/>
-      <img src="public/screenshots/profile.png" alt="Profile" width="50%"/>
+      <img src="public/screenshots/profile.png" alt="Profile" width="100%"/>
     </td>
     <td align="center" width="50%">
       <strong> Add Destination</strong><br/>
