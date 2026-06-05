@@ -15,7 +15,6 @@
 [Report Bug](https://github.com/erpranto55/Wanderlust/issues) ·
 [Request Feature](https://github.com/erpranto55/Wanderlust/issues) ·
 
-
 </div>
 
 ---
@@ -35,38 +34,42 @@ Built with **Next.js 16 App Router**, **MongoDB**, **Better Auth**, **Tailwind C
 <table>
   <tr>
     <td align="center" width="50%">
-      <strong>🏠 Homepage</strong><br/>
+      <strong> Homepage</strong><br/>
       <img src="public/screenshots/homepage.png" alt="Homepage" width="100%"/>
     </td>
     <td align="center" width="50%">
-      <strong>🗺️ Destinations</strong><br/>
+      <strong> Destinations</strong><br/>
       <img src="public/screenshots/destinations.png" alt="Destinations" width="100%"/>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <strong>➕ Add Destination</strong><br/>
-      <img src="public/screenshots/add-destination.png" alt="Add Destination" width="100%"/>
+      <strong> Destination Details</strong><br/>
+      <img src="public/screenshots/destination.png" alt="Destination" width="100%"/>
     </td>
     <td align="center" width="50%">
-      <strong>📅 My Bookings</strong><br/>
+      <strong> My Bookings</strong><br/>
       <img src="public/screenshots/my-bookings.png" alt="My Bookings" width="100%"/>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <strong>🔐 Login</strong><br/>
+      <strong> Login</strong><br/>
       <img src="public/screenshots/login.png" alt="Login" width="100%"/>
     </td>
     <td align="center" width="50%">
-      <strong>📝 Sign Up</strong><br/>
+      <strong> Sign Up</strong><br/>
       <img src="public/screenshots/signup.png" alt="Sign Up" width="100%"/>
     </td>
   </tr>
   <tr>
     <td align="center" colspan="2">
-      <strong>👤 Profile</strong><br/>
+      <strong> Profile</strong><br/>
       <img src="public/screenshots/profile.png" alt="Profile" width="50%"/>
+    </td>
+    <td align="center" width="50%">
+      <strong> Add Destination</strong><br/>
+      <img src="public/screenshots/add-destination.png" alt="Add Destination" width="100%"/>
     </td>
   </tr>
 </table>
